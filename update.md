@@ -61,6 +61,52 @@
    腳本會檢查必要欄位，然後把完整 JSON 寫進 `index.html` 裡 `<!-- DATA:START -->` 與 `<!-- DATA:END -->` 之間的 `<script type="application/json" id="fallback-data">`。JSON 中的 `<` 會被寫成 `\u003c`，以免破壞 script 標籤。
 5. 用瀏覽器打開 `index.html`（或起一個靜態伺服器再打開），確認「最後更新」、篩選、搜尋與來源連結都正常。經由 http 載入時會優先 `fetch('data.json')`；失敗或 `file://` 時自動改用內嵌備份。
 
+6. 確認無誤後，把更新推上 GitHub。Render 會在 `main` 有新 commit 時自動部署，不必再手動觸發，也不必同步 Canvas。
+
+## 發佈位置
+
+線上站是 Render 的免費靜態網站（starter），來源是公開 GitHub 倉庫，根目錄直接上線，建置指令只是 `echo ok`（沒有前端打包步驟）。
+
+| 項目 | 值 |
+| --- | --- |
+| GitHub 倉庫 | https://github.com/aki5202-hash/dublin-radar |
+| 預設分支 | `main` |
+| 線上網址 | https://dublin-radar.onrender.com |
+| Render 服務 ID | `srv-dbqh2abrjlhs738988sg` |
+| Render 工作區 | Trevor's workspace（`tea-dbqc763bc2fs73cvjlg0`） |
+| 自動部署 | 開啟（push 到 `main` 即部署） |
+
+**不要**再維護或同步 Canvas 頁面。這個專案的對外版本是上述靜態網站。
+
+## 排程更新時如何 push（已驗證可重複使用）
+
+本資料夾 `/workspace/dublin-radar` 已是 git 倉庫，`origin` 指向 `https://github.com/aki5202-hash/dublin-radar.git`。box 上的 `gh` / `git` 以 GitHub 帳號 `aki5202-hash`、HTTPS 協定登入（`gh auth status` 可檢查）。第一次建立倉庫與推送用的是：
+
+```bash
+# 僅第一次：建立公開倉庫並推送 main（已完成，排程更新不要再跑 repo create）
+cd /workspace/dublin-radar
+git init -b main
+# … add / commit …
+gh repo create dublin-radar --public --description "都柏林小眾獵奇雷達 — niche and quirky Dublin events static site" --remote origin --source . --push
+```
+
+之後每次資料更新，重複這組指令即可（這是實際成功的方法）：
+
+```bash
+cd /workspace/dublin-radar
+python3 build.py
+git add data.json index.html update.md
+git status
+git commit -m "Refresh Dublin radar listings"
+git push origin main
+```
+
+- 只提交網站檔案。`screenshot.png` 與 `*.zip` 已在 `.gitignore`，不要加入。
+- 不要用 `git push --force`。
+- 不要在自動部署已開啟時再另外呼叫 Render `trigger_deploy`；push 之後等新 deploy 變成 `live` 即可。
+- 若這台機器還沒 clone，先 `gh repo clone aki5202-hash/dublin-radar`，再依上面步驟。
+- cursor-github 連接器沒有建立倉庫或推檔工具；請繼續用 box 上已登入的 `gh` / `git`，不要改用其他帳號。
+
 ## 注意
 
 - 先改 `data.json`，再跑 `build.py`。若只改 HTML 裡的備份、忘記改 JSON，下一次注入會把備份蓋掉。
