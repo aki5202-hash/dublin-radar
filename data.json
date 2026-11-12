@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-11-12T01:21",
+  "lastUpdated": "2026-11-12T01:33",
   "timezone": "Europe/Dublin",
   "items": [
     {
@@ -857,7 +857,40 @@
       "image": "images/open-banba.webp",
       "imageKind": "source",
       "imageCredit": "圖片來源：The Irish Times",
-      "imageOrigin": "https://www.irishtimes.com/resizer/v2/GQJWVGY7FREJBHS5B2LA6QFKHU.JPG?smart=true&auth=a27572b9680eed09451ea902bf97317a7d80e7d528d61fb042abb95c60a0bf3b&width=1200&height=630"
+      "imageOrigin": "https://www.irishtimes.com/resizer/v2/GQJWVGY7FREJBHS5B2LA6QFKHU.JPG?smart=true&auth=a27572b9680eed09451ea902bf97317a7d80e7d528d61fb042abb95c60a0bf3b&width=1200&height=630",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/alternativedublin/reel/Deg29_4IXZJ/",
+          "name": "Instagram @alternativedublin",
+          "kind": "instagram"
+        },
+        {
+          "url": "https://www.instagram.com/banbadublin/p/Dd6LzlIOA2R/",
+          "name": "Instagram @banbadublin",
+          "kind": "instagram"
+        },
+        {
+          "url": "https://www.instagram.com/eatdrinkdub/reel/DeuVU68CnbA/",
+          "name": "Instagram @eatdrinkdub",
+          "kind": "instagram"
+        },
+        {
+          "url": "https://www.instagram.com/banbadublin/p/De7KsrQuYLp/",
+          "name": "Instagram @banbadublin",
+          "kind": "instagram"
+        },
+        {
+          "url": "https://www.instagram.com/banbadublin/p/DfMxUXcOvc7/",
+          "name": "Instagram @banbadublin",
+          "kind": "instagram"
+        },
+        {
+          "url": "https://www.instagram.com/missjonesireland/reel/DfRWWZvhVbS/",
+          "name": "Instagram @missjonesireland",
+          "kind": "instagram"
+        }
+      ],
+      "note": "官方 Instagram：週日 12:00–20:00"
     },
     {
       "id": "open-sister-suesey",
@@ -1394,14 +1427,31 @@
       "venue": "RDS",
       "area": "Ballsbridge, Dublin 4",
       "price": "票價見來源",
-      "hook": "愛爾蘭大型流行文化展回到 RDS，11 月 21、22 日兩天，購票與嘉賓名單見主辦官網。",
+      "hook": "愛爾蘭大型流行文化展回到 RDS，11 月 21、22 日兩天。官方 Instagram 公布的嘉賓包括 Ian Somerhalder、Paul Wesley 與 Kat Graham，購票與完整名單見主辦官網。",
       "rating": 2,
       "source": "https://www.comconireland.com/",
       "sourceName": "Comic Con Ireland",
       "image": "images/ms-comic-con.webp",
       "imageKind": "source",
       "imageCredit": "圖片來源：Comic Con Ireland",
-      "imageOrigin": "https://static.wixstatic.com/media/6eea13_09817633f1ec461f98441add94f2b20d~mv2.png/v1/fill/w_1200,h_618,al_c/6eea13_09817633f1ec461f98441add94f2b20d~mv2.png"
+      "imageOrigin": "https://static.wixstatic.com/media/6eea13_09817633f1ec461f98441add94f2b20d~mv2.png/v1/fill/w_1200,h_618,al_c/6eea13_09817633f1ec461f98441add94f2b20d~mv2.png",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/comconireland/p/DSCt72nDcq7/",
+          "name": "Instagram @comconireland",
+          "kind": "instagram"
+        },
+        {
+          "url": "https://www.instagram.com/comconireland/reel/DcoZETrNZhS/",
+          "name": "Instagram @comconireland",
+          "kind": "instagram"
+        },
+        {
+          "url": "https://www.instagram.com/comconireland/p/DfZf1hvNp8z/",
+          "name": "Instagram @comconireland",
+          "kind": "instagram"
+        }
+      ]
     },
     {
       "id": "ms-robin-hood",
@@ -1548,7 +1598,29 @@
       "image": "images/ms-wild-lights.webp",
       "imageKind": "source",
       "imageCredit": "圖片來源：Dublin Zoo",
-      "imageOrigin": "https://www.dublinzoo.ie/wp-content/uploads/2026/09/Hero-Asset_Square_Portrait_V2-1024x1024.png"
+      "imageOrigin": "https://www.dublinzoo.ie/wp-content/uploads/2026/09/Hero-Asset_Square_Portrait_V2-1024x1024.png",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/dublinzoo_official/p/Dd3tbgWACC5/",
+          "name": "Instagram @dublinzoo_official",
+          "kind": "instagram"
+        },
+        {
+          "url": "https://www.instagram.com/98fmdublin/p/Dd9XX9DF3fd/",
+          "name": "Instagram @98fmdublin",
+          "kind": "instagram"
+        },
+        {
+          "url": "https://www.instagram.com/discoverdublin/reel/DfkrBZcxwMH/",
+          "name": "Instagram @discoverdublin",
+          "kind": "instagram"
+        },
+        {
+          "url": "https://www.instagram.com/oi.irlanda/p/DflahcGjYth/",
+          "name": "Instagram @oi.irlanda",
+          "kind": "instagram"
+        }
+      ]
     },
     {
       "id": "ms-elf-town",
@@ -1591,6 +1663,68 @@
       "imageKind": "source",
       "imageCredit": "圖片來源：3Arena",
       "imageOrigin": "https://3arena.ie/images/uploads/events/_resize/INBC_DUB26_720x720_resize_5b4186bc779460f79120d2db8337624f.jpg"
+    },
+    {
+      "id": "ms-irish-design-week",
+      "kind": "event",
+      "tier": "mainstream",
+      "name": "Irish Design Week 2026",
+      "category": "育",
+      "start": "2026-11-07",
+      "end": "2026-11-14",
+      "dateLabel": "至 11月14日止（7–14日）",
+      "venue": "各地點（都柏林及其他縣市）",
+      "area": "Ireland",
+      "price": "各場次不同，見節目表",
+      "hook": "第五屆 Irish Design Week，主題是 Fáilte Future Europe，官方檔期 11 月 7–14 日，全國節目進行中。",
+      "rating": 2,
+      "source": "https://www.dcci.ie/whats-on/irish-design-week-2026/",
+      "sourceName": "DCCI / Irish Design Week",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/dccireland/p/Dam_4M7ErS1/",
+          "name": "Instagram @dccireland",
+          "kind": "instagram"
+        },
+        {
+          "url": "https://www.instagram.com/dccireland/p/Dd4TCTuFxyN/",
+          "name": "Instagram @dccireland",
+          "kind": "instagram"
+        }
+      ],
+      "image": "images/ms-irish-design-week.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：DCCI / Irish Design Week",
+      "imageOrigin": "https://www.dcci.ie/wp-content/uploads/2026/01/Untitled-design.jpg"
+    },
+    {
+      "id": "ms-joanne-mcnally",
+      "kind": "event",
+      "tier": "mainstream",
+      "name": "Joanne McNally — Pinotphile",
+      "category": "樂",
+      "start": "2026-12-04",
+      "end": "2026-12-12",
+      "dateLabel": "12月4日（五）、5日（六）、11日（五）、12日（六）；4、5、12日官方標示已售罄。4、5日門開 18:30",
+      "venue": "3Arena",
+      "area": "North Wall, Dublin 1",
+      "price": "從 €41.90 起",
+      "hook": "Pinotphile 巡演在 3Arena 加場。官方頁列出 12 月 4、5、11、12 日，其中 4、5、12 日標示已售罄；11 日為後來加開的場次。",
+      "rating": 1,
+      "source": "https://3arena.ie/events/joanne-mcnally",
+      "sourceName": "3Arena",
+      "note": "12月4、5、12日已售罄",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/3arenadublin/p/DcBDG-qD3Xg/",
+          "name": "Instagram @3arenadublin",
+          "kind": "instagram"
+        }
+      ],
+      "image": "images/ms-joanne-mcnally.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：3Arena",
+      "imageOrigin": "https://3arena.ie/images/uploads/events/_resize/JMN_3arena_720x720_resize_5b4186bc779460f79120d2db8337624f.jpg"
     }
   ]
 }

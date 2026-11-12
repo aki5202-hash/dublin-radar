@@ -44,6 +44,7 @@
 | `hook` | 一句繁體中文，說明為什麼值得去。 |
 | `rating` | 獵奇度 1–5 的整數（編輯判斷；主流活動通常較低）。 |
 | `source` / `sourceName` | 可點的原始出處網址，與來源名稱。 |
+| `sources` | 選填。額外出處陣列，例如 Instagram 貼文：`{"url":"https://www.instagram.com/...","name":"Instagram @handle","kind":"instagram"}`。主來源仍用 `source`。有 Instagram 出處的卡片會顯示小徽章。 |
 | `image` | 相對路徑，例如 `images/ms-wild-lights.webp` 或 `images/placeholder-樂.webp`。 |
 | `imageKind` | `source`（出處頁的真實圖片）或 `placeholder`（分類示意）。 |
 | `imageCredit` | 給讀者看的圖片出處，例如「圖片來源：Dublin Zoo」或「分類示意（無活動官方圖片）」。 |
@@ -126,7 +127,7 @@ git push origin main
 
 - 只提交網站檔案。`screenshot.png` 與 `*.zip` 已在 `.gitignore`，不要加入。
 - 不要用 `git push --force`。
-- 不要在自動部署已開啟時再另外呼叫 Render `trigger_deploy`；push 之後等新 deploy 變成 `live` 即可。
+- Render 服務已開自動部署，但若 push 後一兩分鐘 `list_deploys` 仍沒有新的 deploy，請手動 `trigger_deploy`（先前已發生過 webhook 沒有觸發的情況）。
 - 若這台機器還沒 clone，先 `gh repo clone aki5202-hash/dublin-radar`，再依上面步驟。
 - cursor-github 連接器沒有建立倉庫或推檔工具；請繼續用 box 上已登入的 `gh` / `git`，不要改用其他帳號。
 
@@ -136,3 +137,43 @@ git push origin main
 - 不要手改 `<!-- DATA:START -->` / `<!-- DATA:END -->` 這兩行標記本身。
 - 網站沒有打包步驟，也不需要 npm。
 - 刷新時一定要跑圖片抓取（或確認每則都已有 `image` 檔）；不要留下沒圖的卡片。
+
+## 不用登入的 Instagram 蒐集法（已驗證）
+
+Instagram 不需帳號、也不用瀏覽器登入，就能讀到單則貼文的公開 og 標籤。刷新活動時可依這兩步做：
+
+1. **找貼文網址**  
+   用 DuckDuckGo HTML 搜尋，限定帳號路徑，例如：
+
+   ```text
+   site:instagram.com/<handle>/
+   ```
+
+   或加上活動關鍵字與年份（`Wild Lights Dublin Zoo 2026`）。從結果裡收 `https://www.instagram.com/<handle>/p/<shortcode>/` 或 `/reel/<shortcode>/`。不要只存首頁或探索頁。
+
+2. **讀 og:description 與 og:image**  
+   用 User-Agent `facebookexternalhit/1.1` 抓貼文頁（這一組 UA 才能穩定拿到 og 標籤；一般瀏覽器 UA 常常得到登入牆或空頁）：
+
+   ```bash
+   curl -sL -A "facebookexternalhit/1.1" "https://www.instagram.com/p/<shortcode>/"
+   ```
+
+   從 HTML 讀 `og:title`、`og:description`、`og:image`。**不要熱鏈 Instagram CDN 圖片**：`scontent-*.cdninstagram.com` 的網址會過期。若這則卡片要用這張圖（例如目前是分類示意、沒有該活動自己的官方圖），請立刻下載、縮到約 800px，存進 `images/{id}.webp`，並在 `imageCredit` 寫「圖片來源：Instagram @handle」。已有官方海報的條目只需把貼文加進 `sources`，不必覆蓋原圖。
+
+同一場活動若已在 `data.json`，只加 Instagram 為額外來源，不要複製成新條目。日期、票價仍以官方頁為準；貼文沒寫的事實不要補上。
+
+已用上述方法成功讀到公開貼文的帳號：
+
+- `@comconireland`（Comic Con Ireland）
+- `@dccireland`（Irish Design Week / DCCI）
+- `@3arenadublin`（Joanne McNally 等場館檔期）
+- `@dublinzoo_official`（Wild Lights）
+- `@98fmdublin`
+- `@discoverdublin`
+- `@oi.irlanda`
+- `@alternativedublin`
+- `@banbadublin`
+- `@eatdrinkdub`
+- `@missjonesireland`
+
+`fetch_images.py` 碰到 `instagram.com` 或 `cdninstagram.com` 時會自動改用 `facebookexternalhit/1.1`。

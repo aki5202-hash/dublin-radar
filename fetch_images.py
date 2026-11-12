@@ -31,6 +31,7 @@ UA = (
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
     "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
 )
+IG_UA = "facebookexternalhit/1.1"
 TIMEOUT = 20
 MAX_BYTES = 8 * 1024 * 1024
 MAX_WIDTH = 800
@@ -298,6 +299,8 @@ def extract_candidates(page_url: str, html: str, item: dict) -> list[str]:
 def download_image(sess: requests.Session, url: str, referer: str) -> Optional[Image.Image]:
     try:
         headers = {"Referer": referer, "Accept": "image/avif,image/webp,image/*,*/*;q=0.8"}
+        if "instagram.com" in (url or "").lower() or "cdninstagram.com" in (url or "").lower() or "instagram.com" in (referer or "").lower():
+            headers["User-Agent"] = IG_UA
         with sess.get(url, headers=headers, timeout=TIMEOUT, stream=True, allow_redirects=True) as r:
             if r.status_code != 200:
                 return None
@@ -448,7 +451,10 @@ def fetch_page(sess: requests.Session, url: str):
     last = None
     for attempt in range(4):
         try:
-            r = sess.get(url, timeout=TIMEOUT, allow_redirects=True)
+            headers = {}
+            if "instagram.com" in (url or "").lower():
+                headers["User-Agent"] = IG_UA
+            r = sess.get(url, timeout=TIMEOUT, allow_redirects=True, headers=headers or None)
         except Exception:
             time.sleep(1.0 + attempt)
             continue
