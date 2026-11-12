@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>都柏林小眾獵奇雷達</title>
+  <meta name="description" content="都柏林接下來約三週的小眾、好玩、獵奇活動，加上近約四週與即將開業的新店。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #0c0a12;
+      --ink-2: #16131f;
+      --ink-3: #221c2c;
+      --paper: #f6ecd7;
+      --muted: #9a927f;
+      --lime: #c8ff3d;
+      --pink: #ff3d8a;
+      --cyan: #5ce1ff;
+      --lilac: #c9a6ff;
+      --orange: #ff6b3d;
+      --yellow: #ffe14a;
+      --line: rgba(246, 236, 215, 0.12);
+      --shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--paper);
+      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      background:
+        radial-gradient(circle at 85% -8%, rgba(200, 255, 61, 0.14), transparent 42%),
+        radial-gradient(circle at 0% 18%, rgba(255, 61, 138, 0.13), transparent 38%),
+        var(--ink);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+    body::before {
+      content: "";
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0 3px,
+        rgba(0, 0, 0, 0.07) 3px 4px
+      );
+      opacity: 0.4;
+      z-index: 0;
+    }
+    .wrap {
+      position: relative;
+      z-index: 1;
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 72px;
+    }
+    .skip {
+      position: absolute;
+      left: -999px;
+      top: 8px;
+      background: var(--lime);
+      color: #111;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-weight: 700;
+    }
+    .skip:focus { left: 16px; z-index: 20; }
+    .hero {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 24px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--line);
+    }
+    .kicker {
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-size: 11px;
+      color: var(--lime);
+      margin: 0 0 8px;
+    }
+    h1 {
+      font-size: clamp(32px, 7vw, 64px);
+      line-height: 1.05;
+      margin: 0 0 14px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+    }
+    .lede {
+      margin: 0 0 16px;
+      max-width: 42em;
+      color: #ddd4bf;
+      font-size: 16px;
+    }
+    .updated {
+      display: inline-block;
+      margin: 0;
+      padding: 6px 10px;
+      border: 1px solid var(--lime);
+      color: var(--lime);
+      font-size: 12px;
+      letter-spacing: 0.04em;
+    }
+    .radar {
+      flex-shrink: 0;
+      width: 88px;
+      height: 88px;
+      animation: spin 9s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .filters {
+      position: sticky;
+      top: 0;
+      z-index: 8;
+      margin: 24px 0 8px;
+      padding: 12px 0 10px;
+      background: linear-gradient(to bottom, rgba(12, 10, 18, 0.97), rgba(12, 10, 18, 0.94));
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(10px);
+    }
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 10px;
+      margin-bottom: 8px;
+    }
+    .filter-lab {
+      font-size: 12px;
+      color: var(--muted);
+      min-width: 36px;
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chip, .search input {
+      appearance: none;
+      border: 1px solid var(--line);
+      background: var(--ink-2);
+      color: var(--paper);
+      border-radius: 999px;
+      font: inherit;
+    }
+    .chip {
+      padding: 7px 12px;
+      font-size: 13px;
+      cursor: pointer;
+      min-height: 36px;
+    }
+    .chip em {
+      font-style: normal;
+      margin-left: 6px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+    .chip[aria-pressed="true"] {
+      background: var(--lime);
+      color: #111;
+      border-color: var(--lime);
+      font-weight: 700;
+    }
+    .chip[aria-pressed="true"] em { color: #333; }
+    .search { flex: 1; min-width: 180px; }
+    .search input {
+      width: 100%;
+      padding: 8px 14px;
+      font-size: 16px;
+      outline: none;
+    }
+    .search input:focus { border-color: var(--cyan); }
+    .result-count { margin: 0 0 0 auto; font-size: 12px; color: var(--muted); }
+    .sec { padding: 28px 0 8px; }
+    .sec h2 {
+      margin: 0 0 6px;
+      font-size: 28px;
+      font-weight: 900;
+    }
+    .sec h2::before { content: "◆ "; color: var(--pink); }
+    .sec .cap { margin: 0 0 18px; color: var(--muted); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 14px;
+    }
+    .card {
+      background: var(--ink-2);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px 16px 14px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+      box-shadow: var(--shadow);
+    }
+    .card:hover { border-color: rgba(200, 255, 61, 0.4); }
+    .card.cat-食 { border-top: 3px solid var(--orange); }
+    .card.cat-衣 { border-top: 3px solid var(--pink); }
+    .card.cat-住 { border-top: 3px solid var(--lime); }
+    .card.cat-行 { border-top: 3px solid var(--cyan); }
+    .card.cat-育 { border-top: 3px solid var(--lilac); }
+    .card.cat-樂 { border-top: 3px solid var(--yellow); }
+    .card-top { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-bottom: 10px; }
+    .pill {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: var(--ink-3);
+    }
+    .pill i { font-style: normal; font-weight: 400; margin-left: 6px; color: var(--muted); font-size: 11px; }
+    .flag {
+      font-size: 11px;
+      padding: 3px 7px;
+      border-radius: 6px;
+      background: var(--pink);
+      color: #fff;
+      font-weight: 700;
+    }
+    .flag.status { background: var(--cyan); color: #111; }
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      line-height: 1.3;
+      font-weight: 800;
+    }
+    .hook { margin: 0 0 12px; color: #ddd4bf; font-size: 14px; flex: 1; }
+    .meta { list-style: none; margin: 0 0 12px; padding: 0; font-size: 13px; color: #cfc6b0; }
+    .meta li { margin: 0 0 4px; }
+    .meta span { display: inline-block; width: 36px; color: var(--muted); }
+    .card-foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
+    }
+    .rating { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+    .rating b { color: var(--muted); font-weight: 500; }
+    .dot { color: #3a3428; }
+    .dot.on { color: var(--lime); }
+    .rating-num { color: var(--lime); font-weight: 700; }
+    .src {
+      color: var(--cyan);
+      font-size: 12px;
+      text-decoration: none;
+    }
+    .src:hover, .src:focus { text-decoration: underline; }
+    .empty { color: var(--muted); padding: 12px 0 4px; }
+    .foot {
+      margin-top: 40px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: #cfc6b0;
+      font-size: 13px;
+    }
+    .muted { color: var(--muted); }
+    @media (max-width: 680px) {
+      .hero { flex-direction: column; align-items: flex-start; }
+      .radar { width: 64px; height: 64px; }
+      .result-count { margin-left: 36px; }
+      h1 { font-size: 36px; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#list">跳到活動清單</a>
+  <div class="wrap">
+    <header class="hero">
+      <div>
+        <p class="kicker">Dublin Niche Radar · 食衣住行育樂</p>
+        <h1>都柏林小眾獵奇雷達</h1>
+        <p class="lede">給住在都柏林、想躲開人潮的人：小眾、好玩、有點獵奇的活動，加上最新開的店。不編造日期或票價。資料預定每三小時更新。</p>
+        <p class="updated" id="updated">最後更新：讀取中…</p>
+      </div>
+      <svg class="radar" viewBox="0 0 72 72" aria-hidden="true">
+        <circle cx="36" cy="36" r="32" fill="none" stroke="#c8ff3d" stroke-width="1.2" opacity="0.35"/>
+        <circle cx="36" cy="36" r="22" fill="none" stroke="#c8ff3d" stroke-width="1.2" opacity="0.55"/>
+        <circle cx="36" cy="36" r="12" fill="none" stroke="#c8ff3d" stroke-width="1.2" opacity="0.75"/>
+        <circle cx="36" cy="36" r="3" fill="#c8ff3d"/>
+        <path d="M36 36 L62 22" stroke="#c8ff3d" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="58" cy="24" r="3.2" fill="#ff3d8a"/>
+      </svg>
+    </header>
+
+    <section class="filters" aria-label="篩選活動">
+      <div class="filter-row">
+        <span class="filter-lab">搜尋</span>
+        <div class="search">
+          <input id="q" type="search" placeholder="搜尋店名、場地、關鍵字…" autocomplete="off" aria-label="搜尋活動與新店">
+        </div>
+      </div>
+      <div class="filter-row" id="cat-row">
+        <span class="filter-lab">類別</span>
+        <div class="chips" id="cats"></div>
+      </div>
+      <div class="filter-row">
+        <span class="filter-lab">日期</span>
+        <div class="chips" id="dates"></div>
+      </div>
+      <div class="filter-row">
+        <span class="filter-lab">排序</span>
+        <div class="chips" id="sorts"></div>
+        <p class="result-count" id="count"></p>
+      </div>
+    </section>
+
+    <section class="sec" id="new-shops">
+      <h2>新店情報</h2>
+      <p class="cap" id="open-cap">近約四週內剛開業、重新開張，或即將開門的餐廳、咖啡、酒吧與小店。</p>
+      <div class="grid" id="openings"></div>
+    </section>
+
+    <section class="sec" id="list">
+      <h2>活動清單</h2>
+      <p class="cap" id="event-cap">可以按類別、日期篩選，並依獵奇度或日期排序。</p>
+      <div class="grid" id="events"></div>
+    </section>
+
+    <footer class="foot">
+      <p>每一則都來自公開網路來源，並附上連結。活動可能售罄、改期或取消，出門前請再點一次來源確認。獵奇度為編輯判斷，越高越偏小眾、獵奇。</p>
+      <p class="muted" id="foot-updated">預定每三小時更新 · 都柏林時間</p>
+    </footer>
+  </div>
+
+<!-- DATA:START -->
+<script type="application/json" id="fallback-data">
+{
+  "lastUpdated": "2026-11-12T00:58",
+  "timezone": "Europe/Dublin",
+  "items": [
+    {
+      "id": "neville-brody",
+      "kind": "event",
+      "name": "Neville Brody Live in Dublin",
+      "category": "育",
+      "start": "2026-11-12",
+      "dateLabel": "今天 11月12日（四） 18:30",
+      "venue": "Royal Irish Academy of Music",
+      "area": "Westland Row, Dublin 2",
+      "price": "€10",
+      "hook": "The Face 傳奇設計師今晚現身 RIAM，講品牌、字體、文化與 AI，之後還有對談。",
+      "rating": 3,
+      "source": "https://www.dcci.ie/events/neville-brody/",
+      "sourceName": "DCCI / Irish Design Week",
+      "note": "18+"
+    },
+    {
+      "id": "hip-hap-gaelach",
+      "kind": "event",
+      "name": "An Hip-Hap Gaelach",
+      "category": "樂",
+      "start": "2026-11-12",
+      "dateLabel": "今天 11月12日（四） 19:30",
+      "venue": "The Sound House",
+      "area": "Dublin 1",
+      "price": "票價見來源",
+      "hook": "IMRAM 愛爾蘭語文學節最跳的一場：整晚用愛爾蘭語說 rap，卡司有 Blue Niall、Cailín Lofa、Ciara Ní É。",
+      "rating": 5,
+      "source": "https://nialler9.com/the-nialler9-dublin-gig-guide-the-avalanches-modern-lovers-with-bassvictim-more-ae-mak-muna-swapmeet-folk-awards-and-more/",
+      "sourceName": "Nialler9"
+    },
+    {
+      "id": "gb-debarra",
+      "kind": "event",
+      "name": "GB and David deBarra",
+      "category": "樂",
+      "start": "2026-11-12",
+      "dateLabel": "今天 11月12日（四） 約 19:30",
+      "venue": "Bello Bar",
+      "area": "Portobello, Dublin 8",
+      "price": "票價見來源",
+      "hook": "Foggy Notions「Modern Lovers」小節：哥本哈根 GB 愛爾蘭首演，搭檔是把專輯給 Brian Wilson 的 David deBarra。",
+      "rating": 4,
+      "source": "https://nialler9.com/the-nialler9-dublin-gig-guide-the-avalanches-modern-lovers-with-bassvictim-more-ae-mak-muna-swapmeet-folk-awards-and-more/",
+      "sourceName": "Nialler9"
+    },
+    {
+      "id": "lp-rhythm-tengu",
+      "kind": "event",
+      "name": "Tengu x Omni: L.P. Rhythm",
+      "category": "樂",
+      "start": "2026-11-12",
+      "dateLabel": "今天 11月12日（四） 23:00",
+      "venue": "Yamamori Tengu",
+      "area": "Dublin 2",
+      "price": "票價見來源",
+      "hook": "都柏林最好跳的地下室之一，今晚請來 Sunderland 的 house 製作人 L.P. Rhythm。",
+      "rating": 3,
+      "source": "https://nialler9.com/the-nialler9-dublin-gig-guide-the-avalanches-modern-lovers-with-bassvictim-more-ae-mak-muna-swapmeet-folk-awards-and-more/",
+      "sourceName": "Nialler9"
+    },
+    {
+      "id": "roadkill",
+      "kind": "event",
+      "name": "DYKEish Presents — ROADKILL",
+      "category": "樂",
+      "start": "2026-11-10",
+      "end": "2026-11-14",
+      "dateLabel": "至 11月14日（六）止，每晚 19:00",
+      "venue": "Smock Alley Theatre, Boys’ School",
+      "area": "Temple Bar, Dublin 8",
+      "price": "€19–€21",
+      "hook": "酷兒劇場集體 DYKEish 的五十分鐘獨角戲：你以為在講車禍，但劇名那個故事其實不是重點。",
+      "rating": 4,
+      "source": "https://templebardublin.ie/temple-bar-events-november-9-15-2026/",
+      "sourceName": "Discover Temple Bar",
+      "note": "18+；有敏感內容，請先讀場館說明"
+    },
+    {
+      "id": "elk-agent",
+      "kind": "event",
+      "name": "Elk_Agent by 1iing Heaney",
+      "category": "樂",
+      "start": "2026-11-06",
+      "end": "2026-11-22",
+      "dateLabel": "至 11月22日，週三至週日 12:00–18:00",
+      "venue": "Bay 1, The Digital Hub",
+      "area": "Roe Lane, Dublin 8",
+      "price": "詳見來源",
+      "hook": "一具從愛爾蘭沼澤掃描出來的史前巨鹿，在遊戲引擎裡用錯的物理走來走去——坐下來陪它遊蕩。",
+      "rating": 5,
+      "source": "https://www.betafestival.ie/festival-programme/seed-j7nm5-knebh",
+      "sourceName": "Beta Festival"
+    },
+    {
+      "id": "morgan-quaintance",
+      "kind": "event",
+      "name": "Morgan Quaintance: I’ll Always Remember…",
+      "category": "樂",
+      "start": "2026-11-10",
+      "end": "2026-11-22",
+      "dateLabel": "至 11月22日；週二至六 11:00–18:00，週日 12:00–16:00",
+      "venue": "Temple Bar Gallery + Studios",
+      "area": "5–9 Temple Bar, Dublin 2",
+      "price": "免費",
+      "hook": "藝術家兼影人的免費展覽，Temple Bar 裡一處比酒吧靜得多的小眾角落。",
+      "rating": 3,
+      "source": "https://templebardublin.ie/temple-bar-events-november-9-15-2026/",
+      "sourceName": "Discover Temple Bar"
+    },
+    {
+      "id": "irish-linen",
+      "kind": "event",
+      "name": "Celebrating Irish Linen Past and Present",
+      "category": "衣",
+      "start": "2026-11-04",
+      "end": "2026-11-30",
+      "dateLabel": "至 11月30日，常設展覽",
+      "venue": "Europa Experience",
+      "area": "11 Chatham Street, Dublin 2",
+      "price": "免費",
+      "hook": "STABLE of Ireland 策展：把愛爾蘭亞麻的歷史、手感與當代設計，擺進市中心的免費展場。",
+      "rating": 3,
+      "source": "https://www.totallydublin.ie/events/",
+      "sourceName": "Totally Dublin"
+    },
+    {
+      "id": "beyond-the-frame",
+      "kind": "event",
+      "name": "Beyond The Frame",
+      "category": "住",
+      "start": "2026-11-06",
+      "end": "2026-12-06",
+      "dateLabel": "至 12月6日，酒店公共空間展覽",
+      "venue": "The Marker",
+      "area": "Grand Canal Quay, Dublin 2",
+      "price": "免費",
+      "hook": "作品不掛在白盒子裡，而是沿著酒店公共空間與建築延伸——遊走也算看展。",
+      "rating": 3,
+      "source": "https://www.totallydublin.ie/events/",
+      "sourceName": "Totally Dublin"
+    },
+    {
+      "id": "irish-design-for",
+      "kind": "event",
+      "name": "What is Irish Design For?",
+      "category": "住",
+      "start": "2026-11-13",
+      "dateLabel": "11月13日（五） 19:00–22:00",
+      "venue": "G.A.S",
+      "area": "34 Pearse Street, Dublin 2",
+      "price": "已售罄",
+      "hook": "District Magazine 在 Irish Design Week 問一個痛快的問：所謂「愛爾蘭設計」到底是什麼、又該是什麼。",
+      "rating": 3,
+      "source": "https://www.eventbrite.ie/e/what-is-irish-design-for-tickets-2004371437927",
+      "sourceName": "Eventbrite / District Magazine",
+      "note": "已售罄"
+    },
+    {
+      "id": "ae-mak-crash",
+      "kind": "event",
+      "name": "Ae Mak x Crash Ensemble",
+      "category": "樂",
+      "start": "2026-11-13",
+      "dateLabel": "11月13日（五） 20:00",
+      "venue": "National Concert Hall",
+      "area": "Earlsfort Terrace, Dublin 2",
+      "price": "€22",
+      "hook": "Aoife McCann 的藝術流行計畫，被當代音樂團體 Crash Ensemble 拆開重組，只演一晚。",
+      "rating": 4,
+      "source": "https://www.totallydublin.ie/events/",
+      "sourceName": "Totally Dublin"
+    },
+    {
+      "id": "tra-phaidin",
+      "kind": "event",
+      "name": "Trá Pháidín",
+      "category": "育",
+      "start": "2026-11-13",
+      "dateLabel": "11月13日（五） 晚間",
+      "venue": "Smock Alley Theatre",
+      "area": "Temple Bar, Dublin 8",
+      "price": "票價見來源",
+      "hook": "詩人、小說家與音樂人讀出坐公車旅途寫下的新作，加上 Donal Dineen 影像——IMRAM 最像短篇電影的一場。",
+      "rating": 5,
+      "source": "https://nialler9.com/the-nialler9-dublin-gig-guide-the-avalanches-modern-lovers-with-bassvictim-more-ae-mak-muna-swapmeet-folk-awards-and-more/",
+      "sourceName": "Nialler9 / IMRAM"
+    },
+    {
+      "id": "monopoly-child",
+      "kind": "event",
+      "name": "Monopoly Child Star Searchers",
+      "category": "樂",
+      "start": "2026-11-13",
+      "dateLabel": "11月13日（五） 晚間",
+      "venue": "Kirkos",
+      "area": "Dublin",
+      "price": "票價見來源",
+      "hook": "Spencer Clark 的異國情調實驗計畫，登陸 Dublin 實驗空間 Kirkos，聽起來像一張走音的虛榮明信片。",
+      "rating": 5,
+      "source": "https://nialler9.com/the-nialler9-dublin-gig-guide-the-avalanches-modern-lovers-with-bassvictim-more-ae-mak-muna-swapmeet-folk-awards-and-more/",
+      "sourceName": "Nialler9"
+    },
+    {
+      "id": "master-boot-record",
+      "kind": "event",
+      "name": "Master Boot Record & Fulci",
+      "category": "樂",
+      "start": "2026-11-13",
+      "dateLabel": "11月13日（五） 18:00",
+      "venue": "The Academy",
+      "area": "Dublin 2",
+      "price": "票價見來源",
+      "hook": "把電腦主機板當樂器的 chiptune 金屬，週五晚上把 The Academy 變成一代遊戲卡帶。",
+      "rating": 5,
+      "source": "https://togoist.com/dublin/this-weekend/",
+      "sourceName": "Togoist",
+      "note": "18+"
+    },
+    {
+      "id": "signs-of-life",
+      "kind": "event",
+      "name": "Signs Of Life Weekender",
+      "category": "樂",
+      "start": "2026-11-13",
+      "end": "2026-11-14",
+      "dateLabel": "11月13–14日（五、六），兩個房間",
+      "venue": "The Circular",
+      "area": "Rialto, Dublin 8",
+      "price": "免費（須領票）",
+      "hook": "Rialto 兩個房間的免費週末音樂會：現場演出加 DJ，陣容有 Ana Palindrome、Melina Malone、Tr-One。",
+      "rating": 4,
+      "source": "https://nialler9.com/the-nialler9-dublin-gig-guide-the-avalanches-modern-lovers-with-bassvictim-more-ae-mak-muna-swapmeet-folk-awards-and-more/",
+      "sourceName": "Nialler9"
+    },
+    {
+      "id": "alfos",
+      "kind": "event",
+      "name": "A Love From Outer Space: Sean Johnston",
+      "category": "樂",
+      "start": "2026-11-13",
+      "dateLabel": "11月13日（五） 22:00",
+      "venue": "The Sound House",
+      "area": "Dublin 1",
+      "price": "已售罄",
+      "hook": "Andrew Weatherall 與 Sean Johnston 共同開創的傳奇夜店，現在由 Johnston 獨自繼續——已售罄，但值得知道它仍在跳。",
+      "rating": 4,
+      "source": "https://nialler9.com/the-nialler9-dublin-gig-guide-the-avalanches-modern-lovers-with-bassvictim-more-ae-mak-muna-swapmeet-folk-awards-and-more/",
+      "sourceName": "Nialler9",
+      "note": "已售罄"
+    },
+    {
+      "id": "botc",
+      "kind": "event",
+      "name": "Blood on the Clocktower",
+      "category": "育",
+      "start": "2026-11-13",
+      "dateLabel": "11月13日（五） 18:45–21:15",
+      "venue": "O’Reilly Pub",
+      "area": "Dublin 2（場地詳見報名）",
+      "price": "票價見來源",
+      "hook": "比狼人殺更精巧的角色推理桌遊：現場說書人、每人獨有能力，死了也還能跟隊伍贏。新手歡迎。",
+      "rating": 4,
+      "source": "https://luma.com/ch41b10f",
+      "sourceName": "Luma"
+    },
+    {
+      "id": "ghost-tour",
+      "kind": "event",
+      "name": "Legends, Ghosts and Ghouls of Dublin",
+      "category": "行",
+      "start": "2026-11-13",
+      "dateLabel": "11月13日（五） 18:00–20:00",
+      "venue": "Merrion Square South 出發",
+      "area": "Dublin 2",
+      "price": "€14",
+      "hook": "冬夜的都柏林鬼故事步行：不是最小眾的推薦，但週五晚上走過 Merrion Square，氛圍恰到好處。",
+      "rating": 2,
+      "source": "https://www.visitdublin.com/legends-ghosts-and-ghouls-of-dublin-walking-tour-13-nov-2026",
+      "sourceName": "Visit Dublin"
+    },
+    {
+      "id": "art-source",
+      "kind": "event",
+      "name": "Art Source 2026",
+      "category": "住",
+      "start": "2026-11-13",
+      "end": "2026-11-15",
+      "dateLabel": "11月13–15日；五 11:00–21:00，六日 10:00–18:00",
+      "venue": "RDS Hall 1",
+      "area": "Ballsbridge, Dublin 4",
+      "price": "票價見來源",
+      "hook": "可買走的當代藝術與大名作品擺在同一座館，適合週末閒逛，也可能搭一幅回家。",
+      "rating": 2,
+      "source": "https://www.visitdublin.com/art-source-2026",
+      "sourceName": "Visit Dublin / RDS"
+    },
+    {
+      "id": "preloved-blackrock",
+      "kind": "event",
+      "name": "Pre-loved Designer Sale in Blackrock",
+      "category": "衣",
+      "start": "2026-11-13",
+      "end": "2026-11-15",
+      "dateLabel": "11月13–15日；週五 10:00 起",
+      "venue": "Frascati Centre",
+      "area": "Blackrock",
+      "price": "詳見來源",
+      "hook": "二手設計師單品義賣，收益捐給 Breast Cancer Ireland——尋寶與做好事可以一起發生。",
+      "rating": 3,
+      "source": "https://www.eventbrite.com/e/pre-loved-designer-sale-in-blackrock-in-aid-of-breast-cancer-ireland-tickets-2004513930125",
+      "sourceName": "Eventbrite"
+    },
+    {
+      "id": "contact-improv",
+      "kind": "event",
+      "name": "Dynamic Flying with Mirva Mäkinen",
+      "category": "育",
+      "start": "2026-11-14",
+      "end": "2026-11-15",
+      "dateLabel": "11月14–15日（六、日）",
+      "venue": "Dance House",
+      "area": "Foley Street, Dublin 1",
+      "price": "票價請向主辦查詢",
+      "hook": "芬蘭老師回來教接觸即興的「Dynamic Flying」：用身體把體重交給別人，再學會飛。",
+      "rating": 5,
+      "source": "https://contactimprov.ie/",
+      "sourceName": "Contact Improvisation Ireland"
+    },
+    {
+      "id": "dice-players",
+      "kind": "event",
+      "name": "The Dice Players — Comedy Workshop",
+      "category": "育",
+      "start": "2026-11-14",
+      "dateLabel": "11月14日（六） 一日工作坊",
+      "venue": "Palmerstown Parish Hall",
+      "area": "Kennelsfort Road Lower, Dublin 20",
+      "price": "報名制（On Application）",
+      "hook": "Palmerstown 喜劇工作室拉來一整排愛爾蘭喜劇人才，開一天對外工作坊。",
+      "rating": 3,
+      "source": "https://www.totallydublin.ie/events/",
+      "sourceName": "Totally Dublin"
+    },
+    {
+      "id": "temple-bar-market",
+      "kind": "event",
+      "name": "Temple Bar Food & Farmers Market",
+      "category": "食",
+      "start": "2026-11-14",
+      "dateLabel": "11月14日（六） 09:30–15:30",
+      "venue": "Meeting House Square",
+      "area": "Temple Bar, Dublin 2",
+      "price": "瀏覽免費",
+      "hook": "這座市集從 2000 年代初就在這裡：週六早晨把錢留給獨立販商，再逃出 Temple Bar 的觀光節拍。",
+      "rating": 2,
+      "source": "https://templebardublin.ie/temple-bar-events-november-9-15-2026/",
+      "sourceName": "Discover Temple Bar"
+    },
+    {
+      "id": "avalanches",
+      "kind": "event",
+      "name": "The Avalanches (DJ set) with For Those I Love",
+      "category": "樂",
+      "start": "2026-11-14",
+      "dateLabel": "11月14日（六） 23:00",
+      "venue": "Centre Point",
+      "area": "Dublin",
+      "price": "票價見來源",
+      "hook": "平常賣露天大場的澳洲取樣天團，突然跑來小房間做 pop-up DJ，暖場是 For Those I Love 的 David Balfe。",
+      "rating": 4,
+      "source": "https://nialler9.com/the-nialler9-dublin-gig-guide-the-avalanches-modern-lovers-with-bassvictim-more-ae-mak-muna-swapmeet-folk-awards-and-more/",
+      "sourceName": "Nialler9"
+    },
+    {
+      "id": "hidden-gems",
+      "kind": "event",
+      "name": "Hidden Gems of Dublin — Alternative Side Walking Tour",
+      "category": "行",
+      "start": "2026-11-14",
+      "end": "2026-11-29",
+      "dateLabel": "週六 11:00／週日 12:00（本週末起，多場次）",
+      "venue": "Garden of Remembrance 正門出發",
+      "area": "Parnell Square, Dublin 1（終點 The Grand Social）",
+      "price": "免費（鼓勵打賞）",
+      "hook": "不走標籤景點：Moore Street、Chocolate Factory、Panti Bliss、舊時的 Hacienda——由當地藝術家帶路，講都柏林較少被寫進導覽的故事。",
+      "rating": 3,
+      "source": "https://dublin-360.com/event/hidden-gems-of-dublin-free-walking-tour-9",
+      "sourceName": "Dublin 360 / Alternative Side"
+    },
+    {
+      "id": "music-for-reading",
+      "kind": "event",
+      "name": "Music For Reading To",
+      "category": "樂",
+      "start": "2026-11-15",
+      "dateLabel": "11月15日（日） 19:00",
+      "venue": "Barebone（樓上）",
+      "area": "Camden Street, Dublin 2",
+      "price": "票價見來源",
+      "hook": "跟著「Book rave」潮流：環境音裡安靜讀書的週日晚，主辦是 Purelove 的 Trontsephore 與 AYJAY。",
+      "rating": 5,
+      "source": "https://nialler9.com/the-nialler9-dublin-gig-guide-the-avalanches-modern-lovers-with-bassvictim-more-ae-mak-muna-swapmeet-folk-awards-and-more/",
+      "sourceName": "Nialler9"
+    },
+    {
+      "id": "bassvictim",
+      "kind": "event",
+      "name": "Bassvictim",
+      "category": "樂",
+      "start": "2026-11-15",
+      "dateLabel": "11月15日（日） 晚間",
+      "venue": "Opium",
+      "area": "Dublin 8",
+      "price": "票價見來源",
+      "hook": "倫敦二人組自創「Basspunk」：沈重下音加說唱式聲線，Modern Lovers 的愛爾蘭首演。",
+      "rating": 4,
+      "source": "https://nialler9.com/the-nialler9-dublin-gig-guide-the-avalanches-modern-lovers-with-bassvictim-more-ae-mak-muna-swapmeet-folk-awards-and-more/",
+      "sourceName": "Nialler9"
+    },
+    {
+      "id": "michael-collins",
+      "kind": "event",
+      "name": "Film In Dublin — Michael Collins",
+      "category": "樂",
+      "start": "2026-11-15",
+      "dateLabel": "11月15日（日） 19:00",
+      "venue": "Cleary's Pub",
+      "area": "Amiens Street, Dublin 1",
+      "price": "€13.19",
+      "hook": "Neil Jordan 經典上映三十周年：不去電影院，去 Amiens Street 的酒館看 Michael Collins。",
+      "rating": 3,
+      "source": "https://www.totallydublin.ie/events/",
+      "sourceName": "Totally Dublin"
+    },
+    {
+      "id": "portobello-market",
+      "kind": "event",
+      "name": "Portobello Market",
+      "category": "住",
+      "start": "2026-11-15",
+      "dateLabel": "11月15日（日） 11:00–17:00",
+      "venue": "Charlemont Square",
+      "area": "Portobello / Charlemont, Dublin 2",
+      "price": "瀏覽免費",
+      "hook": "Unique Markets 回到他們最愛的廣場之一：陶瓷、手作與小物件，週日下午閒逛正好。",
+      "rating": 3,
+      "source": "https://circular.ie/event/portobello-market-unique-markets-dublin-november-2026",
+      "sourceName": "Circular / Unique Markets"
+    },
+    {
+      "id": "at-duo",
+      "kind": "event",
+      "name": "@",
+      "category": "樂",
+      "start": "2026-11-16",
+      "dateLabel": "11月16日（一） 晚間",
+      "venue": "The Workman’s Club",
+      "area": "Wellington Quay, Dublin 2",
+      "price": "票價見來源",
+      "hook": "團名就叫「@」、讀作 at：費城 4AD 藝術民謠二人組，拿 Autosmile 為 Modern Lovers 收尾。",
+      "rating": 5,
+      "source": "https://nialler9.com/the-nialler9-dublin-gig-guide-the-avalanches-modern-lovers-with-bassvictim-more-ae-mak-muna-swapmeet-folk-awards-and-more/",
+      "sourceName": "Nialler9"
+    },
+    {
+      "id": "kiss-facility",
+      "kind": "event",
+      "name": "Kiss Facility",
+      "category": "樂",
+      "start": "2026-11-16",
+      "dateLabel": "11月16日（一） 晚間",
+      "venue": "The Grand Social",
+      "area": "Dublin 1",
+      "price": "票價見來源",
+      "hook": "Mayah Alkhateri 與 Sega Bodega 的阿拉伯 shoegaze 二人組，帶著首張專輯 Khazna 來都柏林。",
+      "rating": 4,
+      "source": "https://nialler9.com/the-nialler9-dublin-gig-guide-the-avalanches-modern-lovers-with-bassvictim-more-ae-mak-muna-swapmeet-folk-awards-and-more/",
+      "sourceName": "Nialler9"
+    },
+    {
+      "id": "improv-playground",
+      "kind": "event",
+      "name": "The Playground: Weekly Improv Drop-In",
+      "category": "育",
+      "start": "2026-11-16",
+      "dateLabel": "11月16日（一） 19:00（每週例會）",
+      "venue": "The Playground",
+      "area": "Parnell Square, Dublin 1",
+      "price": "票價見來源",
+      "hook": "週一晚上隨到隨做的即興喜劇 drop-in，不用先追一整期課，想玩就上。",
+      "rating": 3,
+      "source": "https://www.meetup.com/improv-comedy-dublin/events/hxnvztyjcpbvb/",
+      "sourceName": "Meetup"
+    },
+    {
+      "id": "rejean-denim",
+      "kind": "event",
+      "name": "ReJean: Make Your Own Denim Tote",
+      "category": "衣",
+      "start": "2026-11-16",
+      "dateLabel": "11月16日（一） 18:00 起，四週縫納工作坊",
+      "venue": "詳見 Meetup",
+      "area": "Dublin",
+      "price": "票價見來源",
+      "hook": "用回收牛仔布縫一隻屬於自己的 tote：四週的手作課，比去買一隻新包有記憶得多。",
+      "rating": 3,
+      "source": "https://www.meetup.com/meetup-group-fbnrhdeb/events/317159149/",
+      "sourceName": "Meetup"
+    },
+    {
+      "id": "final-find",
+      "kind": "event",
+      "name": "The Final Find — Ireland’s Ultimate Style Showcase",
+      "category": "衣",
+      "start": "2026-11-18",
+      "dateLabel": "11月18日（三）",
+      "venue": "The Pillar Room",
+      "area": "Dublin",
+      "price": "票價見來源",
+      "hook": "每套 look 都來自 Enable Ireland 舊貨店的神秘福袋：年輕設計師把二手衣改造成展演服。",
+      "rating": 4,
+      "source": "https://www.image.ie/living/november-guide-the-best-events-happening-this-month-1008284",
+      "sourceName": "IMAGE.ie"
+    },
+    {
+      "id": "ifi-french",
+      "kind": "event",
+      "name": "Peugeot IFI French Film Festival 2026",
+      "category": "樂",
+      "start": "2026-11-18",
+      "end": "2026-11-29",
+      "dateLabel": "11月18–29日，多部影片",
+      "venue": "Irish Film Institute",
+      "area": "Temple Bar, Dublin 2",
+      "price": "票價詳見節目表",
+      "hook": "三十四部法國影片連映：新作、經典與特邀賓客，去 IFI 選一部就算過了一個小假。",
+      "rating": 3,
+      "source": "https://ifi.ie/news/peugeot-ifi-french-film-festival-2026-announced",
+      "sourceName": "Irish Film Institute"
+    },
+    {
+      "id": "turtlestitch",
+      "kind": "event",
+      "name": "Learn Turtlestitch with CESI",
+      "category": "育",
+      "start": "2026-11-21",
+      "dateLabel": "11月21日（六） 14:00",
+      "venue": "TOG Hackerspace",
+      "area": "Inchicore, Dublin 8",
+      "price": "票價見來源",
+      "hook": "在 Inchicore 的黑客空間，用程式碼操控刺繡機——會寫 loop，就會繡花。",
+      "rating": 5,
+      "source": "https://www.meetup.com/tog-dublin-hackerspace/events/317015130/",
+      "sourceName": "Meetup / TOG"
+    },
+    {
+      "id": "brazilian-funk",
+      "kind": "event",
+      "name": "Brazilian Funk Dance Workshop + Brunch",
+      "category": "育",
+      "start": "2026-11-21",
+      "dateLabel": "11月21日（六） 11:00",
+      "venue": "詳見 Meetup",
+      "area": "Dublin",
+      "price": "票價見來源",
+      "hook": "週六上午先跳巴西放克舞、再吃 brunch：把踏步與早午打包接在一起的小玩法。",
+      "rating": 3,
+      "source": "https://www.meetup.com/unare-women-community/events/317284292/",
+      "sourceName": "Meetup"
+    },
+    {
+      "id": "dalkey-print",
+      "kind": "event",
+      "name": "Dalkey Original Print Fair — Winter 2026",
+      "category": "住",
+      "start": "2026-11-21",
+      "end": "2026-11-22",
+      "dateLabel": "11月21–22日（六、日），週六 11:00 起",
+      "venue": "Our Lady's Hall",
+      "area": "40 Castle Street, Dalkey",
+      "price": "免費",
+      "hook": "冬季版畫市集回到 Dalkey：原作版畫與手藝，沿海邊小鎮走一趟就到。",
+      "rating": 3,
+      "source": "https://www.totallydublin.ie/events/",
+      "sourceName": "Totally Dublin"
+    },
+    {
+      "id": "chop-yard",
+      "kind": "event",
+      "name": "Chop Yard Supper Club",
+      "category": "食",
+      "start": "2026-11-26",
+      "dateLabel": "11月26日（四） 18:00–21:00",
+      "venue": "Chillers on the Green",
+      "area": "St Stephen's Green, Dublin 2",
+      "price": "票價見來源",
+      "hook": "Thanksgiving 當週的 Friendsgiving：非洲風味三道菜晚餐會，加酒配、現場表演與破冰遊戲。",
+      "rating": 4,
+      "source": "https://www.eventbrite.ie/e/chop-yard-supper-club-tickets-2004547538649",
+      "sourceName": "Eventbrite"
+    },
+    {
+      "id": "death-milkshake",
+      "kind": "event",
+      "name": "Death Milkshake ‘Cadeaux du ciel’ EP Launch",
+      "category": "樂",
+      "start": "2026-11-28",
+      "dateLabel": "11月28日（六） 20:00",
+      "venue": "Doyle's Corner",
+      "area": "160 Phibsborough Road, Dublin 7",
+      "price": "€15",
+      "hook": "Disco-punk 現場循環藝人在 Phibsboro 發第二張 EP，暖場是都柏林的 Durtburd。",
+      "rating": 4,
+      "source": "https://www.totallydublin.ie/events/",
+      "sourceName": "Totally Dublin"
+    },
+    {
+      "id": "festival-333",
+      "kind": "event",
+      "name": "333 Festival 3.0",
+      "category": "食",
+      "start": "2026-11-28",
+      "dateLabel": "11月28日（六） 15:00 起",
+      "venue": "The Devlin",
+      "area": "Dublin 6",
+      "price": "票價見來源",
+      "hook": "The Devlin 三層樓被音樂、廚師與短片 B+ 都柏林首映佔滿：一場把美食當成主角的社群節。",
+      "rating": 4,
+      "source": "https://www.image.ie/living/november-guide-the-best-events-happening-this-month-1008284",
+      "sourceName": "IMAGE.ie"
+    },
+    {
+      "id": "south-dublin-vintage",
+      "kind": "event",
+      "name": "South Dublin Antiques, Vintage & More Fair",
+      "category": "衣",
+      "start": "2026-11-29",
+      "dateLabel": "11月29日（日） 11:00–17:30",
+      "venue": "Royal Marine Hotel",
+      "area": "Dún Laoghaire",
+      "price": "€3.50（經提醒服務可減 €1；16 歲以下免費）",
+      "hook": "海港邊的古董酒店裡，三四十家販商擺出珠寶、家居與年代衫；散場後可以直接去走碼頭。",
+      "rating": 3,
+      "source": "https://www.psitsvintage.co.uk/pages/events/south-dublin-antiques-vintage-more-fair-2026",
+      "sourceName": "Ps Its Vintage / Vintage Ireland"
+    },
+    {
+      "id": "open-banba",
+      "kind": "opening",
+      "name": "Banba",
+      "category": "食",
+      "start": "2026-10-16",
+      "dateLabel": "10月16日開業",
+      "venue": "The Dean 旁邊喬治亞城屋",
+      "area": "Harcourt Street, Dublin 2",
+      "price": "—",
+      "hook": "Dean 集團新館：季節愛爾蘭食材、家庭式客廳與開放火爐，還推愛爾蘭葡萄酒與自製飲品。",
+      "rating": 3,
+      "source": "https://www.irishtimes.com/food/restaurants/2026/10/13/banba-first-look-local-produce-and-seasonal-flavours-at-dublins-newest-restaurant/",
+      "sourceName": "The Irish Times",
+      "openingStatus": "已開業",
+      "shopType": "餐廳"
+    },
+    {
+      "id": "open-sister-suesey",
+      "kind": "opening",
+      "name": "Sister Suesey (Docklands)",
+      "category": "食",
+      "start": "2026-10-19",
+      "dateLabel": "10月19日開業；冬季 08:00–14:00，週一至五",
+      "venue": "Glandore Bottleworks",
+      "area": "15 Barrow Street, Dublin 4",
+      "price": "—",
+      "hook": "Leeson Street 人氣咖啡窗口的第二家：Roasted Brown 豆、手作麵包，還有室內座位可以坐下來。",
+      "rating": 3,
+      "source": "https://diningindublin.ie/sister-suesey-launches-brand-new-location/",
+      "sourceName": "Dining in Dublin",
+      "openingStatus": "已開業",
+      "shopType": "咖啡"
+    },
+    {
+      "id": "open-awol",
+      "kind": "opening",
+      "name": "AWOL Society",
+      "category": "食",
+      "start": "2026-10-21",
+      "dateLabel": "10月中旬已開業；每日 07:30 起",
+      "venue": "176 Phibsborough Road",
+      "area": "Phibsborough, Dublin 7",
+      "price": "—",
+      "hook": "前面賣精品咖啡與熱三明治，後面藏一間理髮店；歡迎帶狗，還有免費零食給毛孩子。",
+      "rating": 4,
+      "source": "https://lovindublin.substack.com/p/all-the-restaurant-openings-closures-44c",
+      "sourceName": "Lovin Dublin",
+      "openingStatus": "已開業",
+      "shopType": "咖啡／理髮店"
+    },
+    {
+      "id": "open-fennel",
+      "kind": "opening",
+      "name": "Fennel at Lulu's",
+      "category": "食",
+      "start": "2026-10-21",
+      "dateLabel": "10月已設點（見 10月21日報導）",
+      "venue": "Lulu's 窗口",
+      "area": "Aungier Street, Dublin 2",
+      "price": "—",
+      "hook": "Ballsbridge 微型麵包房 Fennel 把烘焙開到了 Aungier Street 的小窗口，順路可以偷一塊。",
+      "rating": 4,
+      "source": "https://lovindublin.substack.com/p/all-the-restaurant-openings-closures-44c",
+      "sourceName": "Lovin Dublin",
+      "openingStatus": "已開業",
+      "shopType": "麵包窗口"
+    },
+    {
+      "id": "open-poddles",
+      "kind": "opening",
+      "name": "Poddles Mill",
+      "category": "食",
+      "start": "2026-10-20",
+      "dateLabel": "10月20日重開",
+      "venue": "原 KCR House",
+      "area": "Kimmage Road, Dublin 12",
+      "price": "—",
+      "hook": "賣掉裝修後重新開張的區內酒館，舊名 KCR House 的人可以回去看看新樣貌。",
+      "rating": 2,
+      "source": "https://everypubindublin.blogspot.com/p/pub-openingsreopeningspipeline-2026.html",
+      "sourceName": "Every Pub in Dublin",
+      "openingStatus": "重新開業",
+      "shopType": "酒館"
+    },
+    {
+      "id": "open-townyard",
+      "kind": "opening",
+      "name": "Townyard Blackrock",
+      "category": "食",
+      "start": "2026-10-25",
+      "dateLabel": "10月下旬開業（低調開幕）",
+      "venue": "原 Big Mike's",
+      "area": "Blackrock",
+      "price": "—",
+      "hook": "Kealy's 接手的新點，10 月下旬帶著「零宣傳」默默開張——正好可以偷偷去試。",
+      "rating": 3,
+      "source": "https://everypubindublin.blogspot.com/p/pub-openingsreopeningspipeline-2026.html",
+      "sourceName": "Every Pub in Dublin",
+      "openingStatus": "已開業",
+      "shopType": "餐酒"
+    },
+    {
+      "id": "open-old-bank",
+      "kind": "opening",
+      "name": "The Old Bank",
+      "category": "食",
+      "start": "2026-10-29",
+      "dateLabel": "10月29日開業",
+      "venue": "原 Stella Steakhouse / Stella Diner，舊銀行大樓",
+      "area": "Rathmines, Dublin 6",
+      "price": "—",
+      "hook": "Eclective 把 Rathmines 舊銀行改成新餐酒空間，取代 Stella Diner，建築本身就很有戲。",
+      "rating": 3,
+      "source": "https://everypubindublin.blogspot.com/p/pub-openingsreopeningspipeline-2026.html",
+      "sourceName": "Every Pub in Dublin",
+      "openingStatus": "已開業",
+      "shopType": "餐酒"
+    },
+    {
+      "id": "open-brownes",
+      "kind": "opening",
+      "name": "Browne's",
+      "category": "食",
+      "start": "2026-10-20",
+      "dateLabel": "近幾週前改裝開業（見 11月3日報導）",
+      "venue": "原 Little Green",
+      "area": "Portmarnock",
+      "price": "—",
+      "hook": "北都柏林新葡萄酒吧：曾在米其林星級餐廳掌酒的主理，把區內咖啡店變成葡萄酒、餐廳與咖啡三用空間。",
+      "rating": 4,
+      "source": "https://www.allthefood.ie/single-post/where-to-eat-in-november",
+      "sourceName": "All The Food",
+      "openingStatus": "已開業",
+      "shopType": "葡萄酒吧／餐廳"
+    },
+    {
+      "id": "open-3brothers",
+      "kind": "opening",
+      "name": "3Brothers",
+      "category": "食",
+      "start": "2026-11-11",
+      "dateLabel": "11月11日開業",
+      "venue": "原 The Betsy",
+      "area": "Swords",
+      "price": "—",
+      "hook": "Swords 才開的新酒吧，從舊 Betsy 翻新；剛開幕一天，適合北縣順路探路。",
+      "rating": 2,
+      "source": "https://everypubindublin.blogspot.com/p/pub-openingsreopeningspipeline-2026.html",
+      "sourceName": "Every Pub in Dublin",
+      "openingStatus": "已開業",
+      "shopType": "酒吧"
+    },
+    {
+      "id": "open-onora",
+      "kind": "opening",
+      "name": "Onóra",
+      "category": "食",
+      "start": "2026-11-15",
+      "dateLabel": "11 月開業（原定 10 月，已延後；正式日期未公佈）",
+      "venue": "The July，獨立入口，對面 Pantibar",
+      "area": "Capel Street, Dublin 1",
+      "price": "—",
+      "hook": "Bereen Brothers 首次過河北：全日鄰里餐廳，晚間轉為酒水與小盤，主廚是 Lauren Shimmin。",
+      "rating": 4,
+      "source": "https://www.hospitalityandcateringnews.com/2026/10/bereen-brothers-and-the-july-to-launch-onora-on-dublins-capel-street/",
+      "sourceName": "Hospitality & Catering News",
+      "openingStatus": "即將開業",
+      "shopType": "餐廳"
+    },
+    {
+      "id": "open-july",
+      "kind": "opening",
+      "name": "The July Hotel",
+      "category": "住",
+      "start": "2026-11-15",
+      "dateLabel": "11月15日起接受訂房",
+      "venue": "The July",
+      "area": "Capel Street, Dublin 1",
+      "price": "—",
+      "hook": "荷蘭品牌的新 aparthotel 落戶 Capel Street，105 間 studio；餐廳就是隔壁的 Onóra。",
+      "rating": 3,
+      "source": "https://everypubindublin.blogspot.com/p/pub-openingsreopeningspipeline-2026.html",
+      "sourceName": "Every Pub in Dublin",
+      "openingStatus": "即將開業",
+      "shopType": "旅館／公寓"
+    },
+    {
+      "id": "open-roxy",
+      "kind": "opening",
+      "name": "Roxy Ball Room",
+      "category": "樂",
+      "start": "2026-11-23",
+      "dateLabel": "11月23日計畫開業",
+      "venue": "原 Central Bank 大樓",
+      "area": "Central Bank Plaza / Temple Bar, Dublin 2",
+      "price": "—",
+      "hook": "遊戲與酒水合體的娛樂酒吧，要開進舊中央銀行大樓——這座建築被改成球房，光聽就夠獵奇。",
+      "rating": 3,
+      "source": "https://everypubindublin.blogspot.com/p/pub-openingsreopeningspipeline-2026.html",
+      "sourceName": "Every Pub in Dublin",
+      "openingStatus": "即將開業",
+      "shopType": "遊戲酒吧"
+    },
+    {
+      "id": "open-hey-annie",
+      "kind": "opening",
+      "name": "Hey Annie",
+      "category": "食",
+      "start": "2026-12-01",
+      "dateLabel": "2026 冬季軟開，正式日期尚未公佈",
+      "venue": "Hey Annie",
+      "area": "Suffolk Street, Dublin 2",
+      "price": "—",
+      "hook": "Featherblade 與 Mister S 主理的第三間店：明火烹飪、奢華食材，All The Food 說這是今冬最值得期待的開幕。",
+      "rating": 4,
+      "source": "https://www.allthefood.ie/single-post/where-to-eat-in-november",
+      "sourceName": "All The Food",
+      "note": "正式開業日期尚未公佈，勿當成已開放",
+      "openingStatus": "即將開業",
+      "shopType": "餐廳"
+    },
+    {
+      "id": "open-goggins",
+      "kind": "opening",
+      "name": "Goggins",
+      "category": "食",
+      "start": "2026-12-01",
+      "dateLabel": "12月1日計畫重開",
+      "venue": "Goggins",
+      "area": "Monkstown",
+      "price": "—",
+      "hook": "閉了很久的 Monkstown 老酒館將於 12 月 1 日重開，與 Ashtown 的 The Lock Keeper 同系。",
+      "rating": 2,
+      "source": "https://everypubindublin.blogspot.com/p/pub-openingsreopeningspipeline-2026.html",
+      "sourceName": "Every Pub in Dublin",
+      "openingStatus": "即將開業",
+      "shopType": "酒館"
+    }
+  ]
+}
+</script>
+<!-- DATA:END -->
+
+  <script>
+    const CAT_HINT = { "食": "美食飲品", "衣": "時尚衣著", "住": "居家設計", "行": "出行探路", "育": "學習工作坊", "樂": "娛樂夜生活" };
+    const CATS = ["食", "衣", "住", "行", "育", "樂"];
+    const TZ = "Europe/Dublin";
+
+    const state = { cat: "all", date: "all", sort: "rating", q: "" };
+    let DATA = null;
+    let TODAY = "";
+    let WEEKEND_FROM = "";
+    let WEEKEND_TO = "";
+    let WEEK_TO = "";
+    let LATER_FROM = "";
+
+    function pad(n) { return String(n).padStart(2, "0"); }
+
+    function dublinNowParts(d) {
+      const parts = new Intl.DateTimeFormat("en-GB", {
+        timeZone: TZ,
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        weekday: "short",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false
+      }).formatToParts(d || new Date());
+      const get = (t) => parts.find((p) => p.type === t).value;
+      return {
+        year: get("year"),
+        month: get("month"),
+        day: get("day"),
+        weekday: get("weekday"),
+        hour: get("hour"),
+        minute: get("minute")
+      };
+    }
+
+    function isoFromParts(p) { return p.year + "-" + p.month + "-" + p.day; }
+
+    function addDays(iso, n) {
+      const [y, m, d] = iso.split("-").map(Number);
+      const dt = new Date(Date.UTC(y, m - 1, d));
+      dt.setUTCDate(dt.getUTCDate() + n);
+      return dt.getUTCFullYear() + "-" + pad(dt.getUTCMonth() + 1) + "-" + pad(dt.getUTCDate());
+    }
+
+    function weekdayIndex(iso) {
+      const [y, m, d] = iso.split("-").map(Number);
+      return new Date(Date.UTC(y, m - 1, d)).getUTCDay();
+    }
+
+    function computeDates() {
+      TODAY = isoFromParts(dublinNowParts());
+      const dow = weekdayIndex(TODAY); // 0 Sun .. 6 Sat
+      const toSun = dow === 0 ? 0 : 7 - dow;
+      WEEK_TO = addDays(TODAY, toSun);
+      const toSat = dow === 0 ? -1 : 6 - dow;
+      WEEKEND_FROM = addDays(TODAY, toSat);
+      WEEKEND_TO = WEEK_TO;
+      LATER_FROM = addDays(WEEK_TO, 1);
+    }
+
+    function formatUpdated(stamp) {
+      if (!stamp) return "時間未知";
+      const [d, t] = String(stamp).split("T");
+      const bits = d.split("-");
+      return bits[0] + "年" + Number(bits[1]) + "月" + Number(bits[2]) + "日 " + (t || "") + "（都柏林時間）";
+    }
+
+    function overlaps(item, from, to) {
+      const s = item.start;
+      const e = item.end || item.start;
+      return s <= to && e >= from;
+    }
+
+    function inDateFilter(item, filter) {
+      if (filter === "all") return true;
+      if (filter === "today") return overlaps(item, TODAY, TODAY);
+      if (filter === "weekend") return overlaps(item, WEEKEND_FROM, WEEKEND_TO);
+      if (filter === "week") return overlaps(item, TODAY, WEEK_TO);
+      return item.end ? item.end >= LATER_FROM : item.start >= LATER_FROM;
+    }
+
+    function matchesQuery(item, q) {
+      if (!q) return true;
+      const hay = [item.name, item.hook, item.venue, item.area, item.sourceName, item.shopType, item.note, item.dateLabel]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+      return hay.includes(q);
+    }
+
+    function ratingMarks(n) {
+      let html = "";
+      for (let i = 0; i < 5; i++) html += '<span class="dot' + (i < n ? " on" : "") + '">◆</span>';
+      return html;
+    }
+
+    function escapeHtml(s) {
+      return String(s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function cardHTML(item) {
+      const flags = [];
+      if (item.openingStatus) flags.push('<span class="flag status">' + escapeHtml(item.openingStatus) + "</span>");
+      if (item.note) flags.push('<span class="flag">' + escapeHtml(item.note) + "</span>");
+      const mid = item.shopType
+        ? "<li><span>類型</span>" + escapeHtml(item.shopType) + "</li>"
+        : "<li><span>票價</span>" + escapeHtml(item.price) + "</li>";
+      return (
+        '<article class="card cat-' + item.category + '">' +
+          '<header class="card-top">' +
+            '<span class="pill">' + item.category + "<i>" + CAT_HINT[item.category] + "</i></span>" +
+            flags.join("") +
+          "</header>" +
+          "<h3>" + escapeHtml(item.name) + "</h3>" +
+          '<p class="hook">' + escapeHtml(item.hook) + "</p>" +
+          '<ul class="meta">' +
+            "<li><span>日期</span>" + escapeHtml(item.dateLabel) + "</li>" +
+            "<li><span>地點</span>" + escapeHtml(item.venue) + " · " + escapeHtml(item.area) + "</li>" +
+            mid +
+          "</ul>" +
+          '<footer class="card-foot">' +
+            '<div class="rating" title="獵奇度 ' + item.rating + ' / 5">' +
+              "<b>獵奇度</b><span>" + ratingMarks(item.rating) + "</span>" +
+              '<span class="rating-num">' + item.rating + "</span>" +
+            "</div>" +
+            '<a class="src" href="' + escapeHtml(item.source) + '" target="_blank" rel="noopener noreferrer">來源：' +
+              escapeHtml(item.sourceName) + " ↗</a>" +
+          "</footer>" +
+        "</article>"
+      );
+    }
+
+    function renderChips() {
+      const items = DATA.items || [];
+      const events = items.filter((i) => i.kind === "event");
+      const counts = { 食: 0, 衣: 0, 住: 0, 行: 0, 育: 0, 樂: 0 };
+      events.forEach((e) => { counts[e.category] += 1; });
+
+      const catBox = document.getElementById("cats");
+      const catBtns = [{ id: "all", label: "全部", n: events.length }].concat(
+        CATS.map((c) => ({ id: c, label: c, n: counts[c] }))
+      );
+      catBox.innerHTML = catBtns.map((c) =>
+        '<button type="button" class="chip" data-cat="' + c.id + '" aria-pressed="' + (state.cat === c.id) + '">' +
+          c.label + "<em>" + c.n + "</em></button>"
+      ).join("");
+
+      const dateHints = {
+        all: "全部日期",
+        today: "今天",
+        weekend: "本週末",
+        week: "本週",
+        later: "之後"
+      };
+      document.getElementById("dates").innerHTML = Object.keys(dateHints).map((id) =>
+        '<button type="button" class="chip" data-date="' + id + '" aria-pressed="' + (state.date === id) + '">' +
+          dateHints[id] + "</button>"
+      ).join("");
+
+      document.getElementById("sorts").innerHTML = [
+        ["rating", "獵奇度"],
+        ["date", "日期"]
+      ].map(([id, label]) =>
+        '<button type="button" class="chip" data-sort="' + id + '" aria-pressed="' + (state.sort === id) + '">' +
+          label + "</button>"
+      ).join("");
+    }
+
+    function render() {
+      const q = state.q.trim().toLowerCase();
+      const items = DATA.items || [];
+      const openings = items
+        .filter((i) => i.kind === "opening")
+        .filter((i) => (state.cat === "all" || i.category === state.cat) && matchesQuery(i, q))
+        .sort((a, b) => a.start.localeCompare(b.start));
+
+      let events = items
+        .filter((i) => i.kind === "event")
+        .filter((i) => (state.cat === "all" || i.category === state.cat) && inDateFilter(i, state.date) && matchesQuery(i, q));
+
+      if (state.sort === "rating") {
+        events = events.slice().sort((a, b) => b.rating - a.rating || a.start.localeCompare(b.start));
+      } else {
+        events = events.slice().sort((a, b) => {
+          const as = a.start < TODAY && (!a.end || a.end >= TODAY) ? TODAY : a.start;
+          const bs = b.start < TODAY && (!b.end || b.end >= TODAY) ? TODAY : b.start;
+          return as.localeCompare(bs) || b.rating - a.rating;
+        });
+      }
+
+      const openBox = document.getElementById("openings");
+      const openSec = document.getElementById("new-shops");
+      document.getElementById("open-cap").textContent =
+        "近約四週內剛開業、重新開張，或即將開門的餐廳、咖啡、酒吧與小店。目前顯示 " + openings.length + " 則。";
+      if (openings.length) {
+        openSec.hidden = false;
+        openBox.innerHTML = openings.map(cardHTML).join("");
+      } else {
+        openSec.hidden = !q && state.cat === "all" ? false : true;
+        openBox.innerHTML = (q || state.cat !== "all") ? "" : '<p class="empty">目前沒有新店情報。</p>';
+        if (q || state.cat !== "all") openSec.hidden = true;
+      }
+
+      const evBox = document.getElementById("events");
+      if (events.length) {
+        evBox.innerHTML = events.map(cardHTML).join("");
+        document.getElementById("event-cap").textContent =
+          "目前顯示 " + events.length + " 項。本週末指 " + WEEKEND_FROM.slice(5).replace("-", "月") + "–" +
+          WEEKEND_TO.slice(8) + "日，本週指至 " + WEEK_TO.slice(5).replace("-", "月") + "日。";
+      } else {
+        evBox.innerHTML = '<p class="empty">這組篩選下沒有符合的活動。換個關鍵字、類別或日期試試。</p>';
+        document.getElementById("event-cap").textContent = "目前沒有符合的活動。";
+      }
+
+      document.getElementById("count").textContent = "顯示 " + events.length + " 項活動";
+      renderChips();
+    }
+
+    function bind() {
+      document.getElementById("cats").addEventListener("click", (e) => {
+        const btn = e.target.closest("[data-cat]");
+        if (!btn) return;
+        state.cat = btn.getAttribute("data-cat");
+        render();
+      });
+      document.getElementById("dates").addEventListener("click", (e) => {
+        const btn = e.target.closest("[data-date]");
+        if (!btn) return;
+        state.date = btn.getAttribute("data-date");
+        render();
+      });
+      document.getElementById("sorts").addEventListener("click", (e) => {
+        const btn = e.target.closest("[data-sort]");
+        if (!btn) return;
+        state.sort = btn.getAttribute("data-sort");
+        render();
+      });
+      document.getElementById("q").addEventListener("input", (e) => {
+        state.q = e.target.value;
+        render();
+      });
+    }
+
+    function fallbackData() {
+      const el = document.getElementById("fallback-data");
+      return JSON.parse(el.textContent);
+    }
+
+    async function loadData() {
+      try {
+        const r = await fetch("data.json", { cache: "no-store" });
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        const json = await r.json();
+        if (!json || !Array.isArray(json.items) || !json.items.length) throw new Error("empty");
+        return json;
+      } catch (err) {
+        return fallbackData();
+      }
+    }
+
+    async function init() {
+      computeDates();
+      DATA = await loadData();
+      const stamp = formatUpdated(DATA.lastUpdated);
+      document.getElementById("updated").textContent = "最後更新：" + stamp;
+      document.getElementById("foot-updated").textContent =
+        "預定每三小時更新 · 都柏林時間 · 最後更新 " + stamp;
+      bind();
+      render();
+    }
+
+    init();
+  </script>
+</body>
+</html>
