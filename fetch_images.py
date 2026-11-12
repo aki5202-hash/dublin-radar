@@ -68,7 +68,7 @@ LISTING_URL_RE = re.compile(
 )
 
 SKIP_NAME_RE = re.compile(
-    r"(logo|favicon|sprite|icon|avatar|pixel|tracking|1x1|spacer|placeholder|badge|button|wordmark)",
+    r"(logo|favicon|sprite|icon|avatar|pixel|tracking|1x1|spacer|placeholder|badge|button|wordmark|crest)",
     re.I,
 )
 STOP = {
