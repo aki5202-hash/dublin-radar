@@ -1,2 +1,4 @@
 screenshot.png
 *.zip
+__pycache__/
+instagram_finds.json

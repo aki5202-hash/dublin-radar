@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>都柏林小眾獵奇雷達</title>
-  <meta name="description" content="都柏林接下來約三週的小眾、好玩、獵奇活動，加上近約四週與即將開業的新店。">
+  <title>都柏林活動雷達 — 主流重點與小眾獵奇</title>
+  <meta name="description" content="都柏林接下來約三週的主流大型活動與小眾獵奇選項，加上近約四週與即將開業的新店。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -189,11 +189,12 @@
       background: var(--ink-2);
       border: 1px solid var(--line);
       border-radius: 18px;
-      padding: 16px 16px 14px;
+      padding: 0 0 14px;
       display: flex;
       flex-direction: column;
       min-height: 100%;
       box-shadow: var(--shadow);
+      overflow: hidden;
     }
     .card:hover { border-color: rgba(200, 255, 61, 0.4); }
     .card.cat-食 { border-top: 3px solid var(--orange); }
@@ -259,6 +260,52 @@
       font-size: 13px;
     }
     .muted { color: var(--muted); }
+
+    .chip.tier-ms[aria-pressed="true"] { background: var(--yellow); border-color: var(--yellow); }
+    .pill.tier-ms {
+      background: var(--yellow);
+      color: #111;
+    }
+.thumb {
+      margin: 0;
+      background: #14111a;
+    }
+    .thumb img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+      background: #14111a;
+    }
+    .thumb.placeholder img { object-fit: cover; }
+    .credit {
+      margin: 0;
+      padding: 6px 16px 0;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+    .card-top, .card h3, .hook, .meta, .card-foot { padding-left: 16px; padding-right: 16px; }
+    .card-top { padding-top: 12px; }
+    .spotlight h2::before { content: "★ "; color: var(--yellow); }
+    .spotlight-track {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding: 4px 2px 16px;
+      margin: 0 -2px;
+    }
+    .spotlight-track .card {
+      flex: 0 0 min(300px, 80vw);
+      scroll-snap-align: start;
+      min-height: 100%;
+    }
+    .spotlight-track::-webkit-scrollbar { height: 8px; }
+    .spotlight-track::-webkit-scrollbar-thumb {
+      background: rgba(255, 225, 74, 0.35);
+      border-radius: 99px;
+    }
     @media (max-width: 680px) {
       .hero { flex-direction: column; align-items: flex-start; }
       .radar { width: 64px; height: 64px; }
@@ -272,9 +319,9 @@
   <div class="wrap">
     <header class="hero">
       <div>
-        <p class="kicker">Dublin Niche Radar · 食衣住行育樂</p>
-        <h1>都柏林小眾獵奇雷達</h1>
-        <p class="lede">給住在都柏林、想躲開人潮的人：小眾、好玩、有點獵奇的活動，加上最新開的店。不編造日期或票價。資料預定每三小時更新。</p>
+        <p class="kicker">Dublin Event Radar · 食衣住行育樂</p>
+        <h1>都柏林活動雷達</h1>
+        <p class="lede">主流大型活動（演唱會、劇場、體育、節慶與展覽）與小眾獵奇選項，加上最新開的店。不編造日期、票價或連結。資料預定每三小時更新。</p>
         <p class="updated" id="updated">最後更新：讀取中…</p>
       </div>
       <svg class="radar" viewBox="0 0 72 72" aria-hidden="true">
@@ -294,6 +341,10 @@
           <input id="q" type="search" placeholder="搜尋店名、場地、關鍵字…" autocomplete="off" aria-label="搜尋活動與新店">
         </div>
       </div>
+      <div class="filter-row">
+        <span class="filter-lab">焦點</span>
+        <div class="chips" id="tiers"></div>
+      </div>
       <div class="filter-row" id="cat-row">
         <span class="filter-lab">類別</span>
         <div class="chips" id="cats"></div>
@@ -309,6 +360,12 @@
       </div>
     </section>
 
+    <section class="sec spotlight" id="spotlight" hidden>
+      <h2>重點活動</h2>
+      <p class="cap" id="spot-cap">接下來值得記在行事曆上的主流大型活動：演唱會、劇場、體育、節慶與展覽。</p>
+      <div class="spotlight-track" id="spotlight-track"></div>
+    </section>
+
     <section class="sec" id="new-shops">
       <h2>新店情報</h2>
       <p class="cap" id="open-cap">近約四週內剛開業、重新開張，或即將開門的餐廳、咖啡、酒吧與小店。</p>
@@ -322,7 +379,7 @@
     </section>
 
     <footer class="foot">
-      <p>每一則都來自公開網路來源，並附上連結。活動可能售罄、改期或取消，出門前請再點一次來源確認。獵奇度為編輯判斷，越高越偏小眾、獵奇。</p>
+      <p>每一則都來自公開網路來源，並附上連結。卡片圖片儘量使用出處頁的活動海報或 og:image，並標明出處；若找不到該活動的真實圖片，則改用分類示意，不會借用其他活動的照片。活動可能售罄、改期或取消，出門前請再點一次來源確認。獵奇度為編輯判斷，越高越偏小眾、獵奇。</p>
       <p class="muted" id="foot-updated">預定每三小時更新 · 都柏林時間</p>
     </footer>
   </div>
@@ -330,7 +387,7 @@
 <!-- DATA:START -->
 <script type="application/json" id="fallback-data">
 {
-  "lastUpdated": "2026-11-12T00:58",
+  "lastUpdated": "2026-11-12T01:21",
   "timezone": "Europe/Dublin",
   "items": [
     {
@@ -347,7 +404,12 @@
       "rating": 3,
       "source": "https://www.dcci.ie/events/neville-brody/",
       "sourceName": "DCCI / Irish Design Week",
-      "note": "18+"
+      "note": "18+",
+      "tier": "niche",
+      "image": "images/neville-brody.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：DCCI / Irish Design Week",
+      "imageOrigin": "https://www.dcci.ie/wp-content/uploads/2026/10/Neville-Brody-Live-in-Dublin.png"
     },
     {
       "id": "hip-hap-gaelach",
@@ -362,7 +424,11 @@
       "hook": "IMRAM 愛爾蘭語文學節最跳的一場：整晚用愛爾蘭語說 rap，卡司有 Blue Niall、Cailín Lofa、Ciara Ní É。",
       "rating": 5,
       "source": "https://nialler9.com/the-nialler9-dublin-gig-guide-the-avalanches-modern-lovers-with-bassvictim-more-ae-mak-muna-swapmeet-folk-awards-and-more/",
-      "sourceName": "Nialler9"
+      "sourceName": "Nialler9",
+      "tier": "niche",
+      "image": "images/placeholder-樂.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "gb-debarra",
@@ -377,7 +443,11 @@
       "hook": "Foggy Notions「Modern Lovers」小節：哥本哈根 GB 愛爾蘭首演，搭檔是把專輯給 Brian Wilson 的 David deBarra。",
       "rating": 4,
       "source": "https://nialler9.com/the-nialler9-dublin-gig-guide-the-avalanches-modern-lovers-with-bassvictim-more-ae-mak-muna-swapmeet-folk-awards-and-more/",
-      "sourceName": "Nialler9"
+      "sourceName": "Nialler9",
+      "tier": "niche",
+      "image": "images/placeholder-樂.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "lp-rhythm-tengu",
@@ -392,7 +462,11 @@
       "hook": "都柏林最好跳的地下室之一，今晚請來 Sunderland 的 house 製作人 L.P. Rhythm。",
       "rating": 3,
       "source": "https://nialler9.com/the-nialler9-dublin-gig-guide-the-avalanches-modern-lovers-with-bassvictim-more-ae-mak-muna-swapmeet-folk-awards-and-more/",
-      "sourceName": "Nialler9"
+      "sourceName": "Nialler9",
+      "tier": "niche",
+      "image": "images/placeholder-樂.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "roadkill",
@@ -409,7 +483,11 @@
       "rating": 4,
       "source": "https://templebardublin.ie/temple-bar-events-november-9-15-2026/",
       "sourceName": "Discover Temple Bar",
-      "note": "18+；有敏感內容，請先讀場館說明"
+      "note": "18+；有敏感內容，請先讀場館說明",
+      "tier": "niche",
+      "image": "images/placeholder-樂.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "elk-agent",
@@ -425,7 +503,12 @@
       "hook": "一具從愛爾蘭沼澤掃描出來的史前巨鹿，在遊戲引擎裡用錯的物理走來走去——坐下來陪它遊蕩。",
       "rating": 5,
       "source": "https://www.betafestival.ie/festival-programme/seed-j7nm5-knebh",
-      "sourceName": "Beta Festival"
+      "sourceName": "Beta Festival",
+      "tier": "niche",
+      "image": "images/elk-agent.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：Beta Festival",
+      "imageOrigin": "https://images.squarespace-cdn.com/content/v1/6a75e2458e743f617ba20ee7/1790624210601-5IDYBUQA0VG2TBDR5DNI/image+%284%29.png"
     },
     {
       "id": "morgan-quaintance",
@@ -441,7 +524,11 @@
       "hook": "藝術家兼影人的免費展覽，Temple Bar 裡一處比酒吧靜得多的小眾角落。",
       "rating": 3,
       "source": "https://templebardublin.ie/temple-bar-events-november-9-15-2026/",
-      "sourceName": "Discover Temple Bar"
+      "sourceName": "Discover Temple Bar",
+      "tier": "niche",
+      "image": "images/placeholder-樂.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "irish-linen",
@@ -457,7 +544,11 @@
       "hook": "STABLE of Ireland 策展：把愛爾蘭亞麻的歷史、手感與當代設計，擺進市中心的免費展場。",
       "rating": 3,
       "source": "https://www.totallydublin.ie/events/",
-      "sourceName": "Totally Dublin"
+      "sourceName": "Totally Dublin",
+      "tier": "niche",
+      "image": "images/placeholder-衣.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "beyond-the-frame",
@@ -473,7 +564,11 @@
       "hook": "作品不掛在白盒子裡，而是沿著酒店公共空間與建築延伸——遊走也算看展。",
       "rating": 3,
       "source": "https://www.totallydublin.ie/events/",
-      "sourceName": "Totally Dublin"
+      "sourceName": "Totally Dublin",
+      "tier": "niche",
+      "image": "images/placeholder-住.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "irish-design-for",
@@ -489,7 +584,12 @@
       "rating": 3,
       "source": "https://www.eventbrite.ie/e/what-is-irish-design-for-tickets-2004371437927",
       "sourceName": "Eventbrite / District Magazine",
-      "note": "已售罄"
+      "note": "已售罄",
+      "tier": "niche",
+      "image": "images/irish-design-for.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：Eventbrite / District Magazine",
+      "imageOrigin": "https://www.eventbrite.ie/_next/image?url=https%3A%2F%2Fimg.evbuc.com%2Fhttps%253A%252F%252Fcdn.evbuc.com%252Fimages%252F1197269916%252F198396332484%252F1%252Foriginal.20261104-162005%3Fcrop%3Dfocalpoint%26fit%3Dcrop%26w%3D940%26auto%3Dformat%252Ccompress%26q%3D75%26sharp%3D10%26fp-x%3D0.5%26fp-y%3D0.5%26s%3Dab396e4ac88c10f80a021884ef65f1d6&w=940&q=75"
     },
     {
       "id": "ae-mak-crash",
@@ -504,7 +604,11 @@
       "hook": "Aoife McCann 的藝術流行計畫，被當代音樂團體 Crash Ensemble 拆開重組，只演一晚。",
       "rating": 4,
       "source": "https://www.totallydublin.ie/events/",
-      "sourceName": "Totally Dublin"
+      "sourceName": "Totally Dublin",
+      "tier": "niche",
+      "image": "images/placeholder-樂.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "tra-phaidin",
@@ -519,7 +623,11 @@
       "hook": "詩人、小說家與音樂人讀出坐公車旅途寫下的新作，加上 Donal Dineen 影像——IMRAM 最像短篇電影的一場。",
       "rating": 5,
       "source": "https://nialler9.com/the-nialler9-dublin-gig-guide-the-avalanches-modern-lovers-with-bassvictim-more-ae-mak-muna-swapmeet-folk-awards-and-more/",
-      "sourceName": "Nialler9 / IMRAM"
+      "sourceName": "Nialler9 / IMRAM",
+      "tier": "niche",
+      "image": "images/placeholder-育.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "monopoly-child",
@@ -534,7 +642,11 @@
       "hook": "Spencer Clark 的異國情調實驗計畫，登陸 Dublin 實驗空間 Kirkos，聽起來像一張走音的虛榮明信片。",
       "rating": 5,
       "source": "https://nialler9.com/the-nialler9-dublin-gig-guide-the-avalanches-modern-lovers-with-bassvictim-more-ae-mak-muna-swapmeet-folk-awards-and-more/",
-      "sourceName": "Nialler9"
+      "sourceName": "Nialler9",
+      "tier": "niche",
+      "image": "images/placeholder-樂.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "master-boot-record",
@@ -550,7 +662,12 @@
       "rating": 5,
       "source": "https://togoist.com/dublin/this-weekend/",
       "sourceName": "Togoist",
-      "note": "18+"
+      "note": "18+",
+      "tier": "niche",
+      "image": "images/master-boot-record.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：Togoist",
+      "imageOrigin": "https://s1.ticketm.net/dam/a/e71/da04a86a-1966-4e96-b611-168dc8ac2e71_RETINA_PORTRAIT_3_2.jpg"
     },
     {
       "id": "signs-of-life",
@@ -566,7 +683,11 @@
       "hook": "Rialto 兩個房間的免費週末音樂會：現場演出加 DJ，陣容有 Ana Palindrome、Melina Malone、Tr-One。",
       "rating": 4,
       "source": "https://nialler9.com/the-nialler9-dublin-gig-guide-the-avalanches-modern-lovers-with-bassvictim-more-ae-mak-muna-swapmeet-folk-awards-and-more/",
-      "sourceName": "Nialler9"
+      "sourceName": "Nialler9",
+      "tier": "niche",
+      "image": "images/placeholder-樂.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "alfos",
@@ -582,7 +703,11 @@
       "rating": 4,
       "source": "https://nialler9.com/the-nialler9-dublin-gig-guide-the-avalanches-modern-lovers-with-bassvictim-more-ae-mak-muna-swapmeet-folk-awards-and-more/",
       "sourceName": "Nialler9",
-      "note": "已售罄"
+      "note": "已售罄",
+      "tier": "niche",
+      "image": "images/placeholder-樂.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "botc",
@@ -597,7 +722,12 @@
       "hook": "比狼人殺更精巧的角色推理桌遊：現場說書人、每人獨有能力，死了也還能跟隊伍贏。新手歡迎。",
       "rating": 4,
       "source": "https://luma.com/ch41b10f",
-      "sourceName": "Luma"
+      "sourceName": "Luma",
+      "tier": "niche",
+      "image": "images/botc.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：Luma",
+      "imageOrigin": "https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=1,anim=false,background=white,quality=75,width=800,height=420/event-social/l7/1600dbcd-793e-471d-8400-a7e080d06268.png"
     },
     {
       "id": "ghost-tour",
@@ -612,7 +742,12 @@
       "hook": "冬夜的都柏林鬼故事步行：不是最小眾的推薦，但週五晚上走過 Merrion Square，氛圍恰到好處。",
       "rating": 2,
       "source": "https://www.visitdublin.com/legends-ghosts-and-ghouls-of-dublin-walking-tour-13-nov-2026",
-      "sourceName": "Visit Dublin"
+      "sourceName": "Visit Dublin",
+      "tier": "niche",
+      "image": "images/ghost-tour.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：Visit Dublin",
+      "imageOrigin": "https://assets-eu-01.kc-usercontent.com:443/aa24ba70-9a12-01ae-259b-7ef588a0b2ef/b27a8b23-be9c-4697-bf96-505f3fa5b38a/legendsghosts.jpeg?w=800"
     },
     {
       "id": "art-source",
@@ -628,7 +763,12 @@
       "hook": "可買走的當代藝術與大名作品擺在同一座館，適合週末閒逛，也可能搭一幅回家。",
       "rating": 2,
       "source": "https://www.visitdublin.com/art-source-2026",
-      "sourceName": "Visit Dublin / RDS"
+      "sourceName": "Visit Dublin / RDS",
+      "tier": "niche",
+      "image": "images/art-source.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：Visit Dublin / RDS",
+      "imageOrigin": "https://assets-eu-01.kc-usercontent.com:443/aa24ba70-9a12-01ae-259b-7ef588a0b2ef/c4de02a0-f2b9-4234-a892-39df38e8c484/926f90a8-2c82-4af4-8d78-51e73d954fdf.jpg?w=800"
     },
     {
       "id": "preloved-blackrock",
@@ -644,7 +784,12 @@
       "hook": "二手設計師單品義賣，收益捐給 Breast Cancer Ireland——尋寶與做好事可以一起發生。",
       "rating": 3,
       "source": "https://www.eventbrite.com/e/pre-loved-designer-sale-in-blackrock-in-aid-of-breast-cancer-ireland-tickets-2004513930125",
-      "sourceName": "Eventbrite"
+      "sourceName": "Eventbrite",
+      "tier": "niche",
+      "image": "images/preloved-blackrock.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：Eventbrite",
+      "imageOrigin": "https://www.eventbrite.com/_next/image?url=https%3A%2F%2Fimg.evbuc.com%2Fhttps%253A%252F%252Fcdn.evbuc.com%252Fimages%252F1197486261%252F3020611881053%252F1%252Foriginal.20261107-111824%3Fcrop%3Dfocalpoint%26fit%3Dcrop%26w%3D940%26auto%3Dformat%252Ccompress%26q%3D75%26sharp%3D10%26fp-x%3D0.495%26fp-y%3D0.514%26s%3D8ea95c1398bdced1e033674817464143&w=940&q=75"
     },
     {
       "id": "contact-improv",
@@ -660,7 +805,12 @@
       "hook": "芬蘭老師回來教接觸即興的「Dynamic Flying」：用身體把體重交給別人，再學會飛。",
       "rating": 5,
       "source": "https://contactimprov.ie/",
-      "sourceName": "Contact Improvisation Ireland"
+      "sourceName": "Contact Improvisation Ireland",
+      "tier": "niche",
+      "image": "images/contact-improv.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：Contact Improvisation Ireland",
+      "imageOrigin": "https://contactimprov.ie/wp-content/uploads/2026/06/Mirva-Makinen-Promo1-300x300.jpg"
     },
     {
       "id": "dice-players",
@@ -675,7 +825,11 @@
       "hook": "Palmerstown 喜劇工作室拉來一整排愛爾蘭喜劇人才，開一天對外工作坊。",
       "rating": 3,
       "source": "https://www.totallydublin.ie/events/",
-      "sourceName": "Totally Dublin"
+      "sourceName": "Totally Dublin",
+      "tier": "niche",
+      "image": "images/placeholder-育.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "temple-bar-market",
@@ -690,7 +844,11 @@
       "hook": "這座市集從 2000 年代初就在這裡：週六早晨把錢留給獨立販商，再逃出 Temple Bar 的觀光節拍。",
       "rating": 2,
       "source": "https://templebardublin.ie/temple-bar-events-november-9-15-2026/",
-      "sourceName": "Discover Temple Bar"
+      "sourceName": "Discover Temple Bar",
+      "tier": "niche",
+      "image": "images/placeholder-食.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "avalanches",
@@ -705,7 +863,11 @@
       "hook": "平常賣露天大場的澳洲取樣天團，突然跑來小房間做 pop-up DJ，暖場是 For Those I Love 的 David Balfe。",
       "rating": 4,
       "source": "https://nialler9.com/the-nialler9-dublin-gig-guide-the-avalanches-modern-lovers-with-bassvictim-more-ae-mak-muna-swapmeet-folk-awards-and-more/",
-      "sourceName": "Nialler9"
+      "sourceName": "Nialler9",
+      "tier": "niche",
+      "image": "images/placeholder-樂.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "hidden-gems",
@@ -721,7 +883,12 @@
       "hook": "不走標籤景點：Moore Street、Chocolate Factory、Panti Bliss、舊時的 Hacienda——由當地藝術家帶路，講都柏林較少被寫進導覽的故事。",
       "rating": 3,
       "source": "https://dublin-360.com/event/hidden-gems-of-dublin-free-walking-tour-9",
-      "sourceName": "Dublin 360 / Alternative Side"
+      "sourceName": "Dublin 360 / Alternative Side",
+      "tier": "niche",
+      "image": "images/hidden-gems.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：Dublin 360 / Alternative Side",
+      "imageOrigin": "https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F787486539%2F265960055939%2F1%2Foriginal.20240611-154435?auto=format%2Ccompress&q=75&sharp=10&s=9603e27a226a33820b9626f83cff32bf"
     },
     {
       "id": "music-for-reading",
@@ -736,7 +903,11 @@
       "hook": "跟著「Book rave」潮流：環境音裡安靜讀書的週日晚，主辦是 Purelove 的 Trontsephore 與 AYJAY。",
       "rating": 5,
       "source": "https://nialler9.com/the-nialler9-dublin-gig-guide-the-avalanches-modern-lovers-with-bassvictim-more-ae-mak-muna-swapmeet-folk-awards-and-more/",
-      "sourceName": "Nialler9"
+      "sourceName": "Nialler9",
+      "tier": "niche",
+      "image": "images/placeholder-樂.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "bassvictim",
@@ -751,7 +922,11 @@
       "hook": "倫敦二人組自創「Basspunk」：沈重下音加說唱式聲線，Modern Lovers 的愛爾蘭首演。",
       "rating": 4,
       "source": "https://nialler9.com/the-nialler9-dublin-gig-guide-the-avalanches-modern-lovers-with-bassvictim-more-ae-mak-muna-swapmeet-folk-awards-and-more/",
-      "sourceName": "Nialler9"
+      "sourceName": "Nialler9",
+      "tier": "niche",
+      "image": "images/placeholder-樂.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "michael-collins",
@@ -766,7 +941,11 @@
       "hook": "Neil Jordan 經典上映三十周年：不去電影院，去 Amiens Street 的酒館看 Michael Collins。",
       "rating": 3,
       "source": "https://www.totallydublin.ie/events/",
-      "sourceName": "Totally Dublin"
+      "sourceName": "Totally Dublin",
+      "tier": "niche",
+      "image": "images/placeholder-樂.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "portobello-market",
@@ -781,7 +960,12 @@
       "hook": "Unique Markets 回到他們最愛的廣場之一：陶瓷、手作與小物件，週日下午閒逛正好。",
       "rating": 3,
       "source": "https://circular.ie/event/portobello-market-unique-markets-dublin-november-2026",
-      "sourceName": "Circular / Unique Markets"
+      "sourceName": "Circular / Unique Markets",
+      "tier": "niche",
+      "image": "images/portobello-market.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：Circular / Unique Markets",
+      "imageOrigin": "https://circular.ie/img/containers/assets/events-circular.ie-3-portobello-market-november-2026.webp/60770b304ccf472c5c9afee2009313c9/events-circular.ie-3-portobello-market-november-2026.webp"
     },
     {
       "id": "at-duo",
@@ -796,7 +980,11 @@
       "hook": "團名就叫「@」、讀作 at：費城 4AD 藝術民謠二人組，拿 Autosmile 為 Modern Lovers 收尾。",
       "rating": 5,
       "source": "https://nialler9.com/the-nialler9-dublin-gig-guide-the-avalanches-modern-lovers-with-bassvictim-more-ae-mak-muna-swapmeet-folk-awards-and-more/",
-      "sourceName": "Nialler9"
+      "sourceName": "Nialler9",
+      "tier": "niche",
+      "image": "images/placeholder-樂.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "kiss-facility",
@@ -811,7 +999,11 @@
       "hook": "Mayah Alkhateri 與 Sega Bodega 的阿拉伯 shoegaze 二人組，帶著首張專輯 Khazna 來都柏林。",
       "rating": 4,
       "source": "https://nialler9.com/the-nialler9-dublin-gig-guide-the-avalanches-modern-lovers-with-bassvictim-more-ae-mak-muna-swapmeet-folk-awards-and-more/",
-      "sourceName": "Nialler9"
+      "sourceName": "Nialler9",
+      "tier": "niche",
+      "image": "images/placeholder-樂.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "improv-playground",
@@ -826,7 +1018,12 @@
       "hook": "週一晚上隨到隨做的即興喜劇 drop-in，不用先追一整期課，想玩就上。",
       "rating": 3,
       "source": "https://www.meetup.com/improv-comedy-dublin/events/hxnvztyjcpbvb/",
-      "sourceName": "Meetup"
+      "sourceName": "Meetup",
+      "tier": "niche",
+      "image": "images/improv-playground.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：Meetup",
+      "imageOrigin": "https://secure.meetupstatic.com/photos/event/2/8/6/8/600_515470344.jpeg"
     },
     {
       "id": "rejean-denim",
@@ -841,7 +1038,12 @@
       "hook": "用回收牛仔布縫一隻屬於自己的 tote：四週的手作課，比去買一隻新包有記憶得多。",
       "rating": 3,
       "source": "https://www.meetup.com/meetup-group-fbnrhdeb/events/317159149/",
-      "sourceName": "Meetup"
+      "sourceName": "Meetup",
+      "tier": "niche",
+      "image": "images/rejean-denim.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：Meetup",
+      "imageOrigin": "https://secure.meetupstatic.com/photos/event/2/5/e/0/600_536829696.jpeg"
     },
     {
       "id": "final-find",
@@ -856,7 +1058,11 @@
       "hook": "每套 look 都來自 Enable Ireland 舊貨店的神秘福袋：年輕設計師把二手衣改造成展演服。",
       "rating": 4,
       "source": "https://www.image.ie/living/november-guide-the-best-events-happening-this-month-1008284",
-      "sourceName": "IMAGE.ie"
+      "sourceName": "IMAGE.ie",
+      "tier": "niche",
+      "image": "images/placeholder-衣.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "ifi-french",
@@ -872,7 +1078,12 @@
       "hook": "三十四部法國影片連映：新作、經典與特邀賓客，去 IFI 選一部就算過了一個小假。",
       "rating": 3,
       "source": "https://ifi.ie/news/peugeot-ifi-french-film-festival-2026-announced",
-      "sourceName": "Irish Film Institute"
+      "sourceName": "Irish Film Institute",
+      "tier": "niche",
+      "image": "images/ifi-french.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：Irish Film Institute",
+      "imageOrigin": "https://cms.ifi.ie/uploads/_1200x630_crop_center-center_82_none/Plain-Image-Peugeot-IFI-French-Film-Festival-2026-Banner.png?mtime=1791810986"
     },
     {
       "id": "turtlestitch",
@@ -887,7 +1098,12 @@
       "hook": "在 Inchicore 的黑客空間，用程式碼操控刺繡機——會寫 loop，就會繡花。",
       "rating": 5,
       "source": "https://www.meetup.com/tog-dublin-hackerspace/events/317015130/",
-      "sourceName": "Meetup / TOG"
+      "sourceName": "Meetup / TOG",
+      "tier": "niche",
+      "image": "images/turtlestitch.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：Meetup / TOG",
+      "imageOrigin": "https://secure.meetupstatic.com/photos/event/d/9/d/d/600_536635773.jpeg"
     },
     {
       "id": "brazilian-funk",
@@ -902,7 +1118,12 @@
       "hook": "週六上午先跳巴西放克舞、再吃 brunch：把踏步與早午打包接在一起的小玩法。",
       "rating": 3,
       "source": "https://www.meetup.com/unare-women-community/events/317284292/",
-      "sourceName": "Meetup"
+      "sourceName": "Meetup",
+      "tier": "niche",
+      "image": "images/brazilian-funk.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：Meetup",
+      "imageOrigin": "https://secure.meetupstatic.com/photos/event/8/e/0/1/600_536976353.jpeg"
     },
     {
       "id": "dalkey-print",
@@ -918,7 +1139,12 @@
       "hook": "冬季版畫市集回到 Dalkey：原作版畫與手藝，沿海邊小鎮走一趟就到。",
       "rating": 3,
       "source": "https://www.totallydublin.ie/events/",
-      "sourceName": "Totally Dublin"
+      "sourceName": "Totally Dublin",
+      "tier": "niche",
+      "image": "images/dalkey-print.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：Totally Dublin",
+      "imageOrigin": "https://www.totallydublin.ie/wp-content/uploads/2026/10/Dalkey-Original-Print-Fair_winter_2026-copy.jpg"
     },
     {
       "id": "chop-yard",
@@ -933,7 +1159,12 @@
       "hook": "Thanksgiving 當週的 Friendsgiving：非洲風味三道菜晚餐會，加酒配、現場表演與破冰遊戲。",
       "rating": 4,
       "source": "https://www.eventbrite.ie/e/chop-yard-supper-club-tickets-2004547538649",
-      "sourceName": "Eventbrite"
+      "sourceName": "Eventbrite",
+      "tier": "niche",
+      "image": "images/chop-yard.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：Eventbrite",
+      "imageOrigin": "https://www.eventbrite.ie/_next/image?url=https%3A%2F%2Fimg.evbuc.com%2Fhttps%253A%252F%252Fcdn.evbuc.com%252Fimages%252F1197537667%252F3014120968509%252F1%252Foriginal.20261108-171002%3Fcrop%3Dfocalpoint%26fit%3Dcrop%26w%3D940%26auto%3Dformat%252Ccompress%26q%3D75%26sharp%3D10%26fp-x%3D0.5%26fp-y%3D0.5%26s%3D5c5a727664bce9486db984892e648ffa&w=940&q=75"
     },
     {
       "id": "death-milkshake",
@@ -948,7 +1179,12 @@
       "hook": "Disco-punk 現場循環藝人在 Phibsboro 發第二張 EP，暖場是都柏林的 Durtburd。",
       "rating": 4,
       "source": "https://www.totallydublin.ie/events/",
-      "sourceName": "Totally Dublin"
+      "sourceName": "Totally Dublin",
+      "tier": "niche",
+      "image": "images/death-milkshake.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：Totally Dublin",
+      "imageOrigin": "https://www.totallydublin.ie/wp-content/uploads/2026/11/Death_Milkshake_Selection-13credit-@cianlookalive-copy-2.jpg"
     },
     {
       "id": "festival-333",
@@ -963,7 +1199,11 @@
       "hook": "The Devlin 三層樓被音樂、廚師與短片 B+ 都柏林首映佔滿：一場把美食當成主角的社群節。",
       "rating": 4,
       "source": "https://www.image.ie/living/november-guide-the-best-events-happening-this-month-1008284",
-      "sourceName": "IMAGE.ie"
+      "sourceName": "IMAGE.ie",
+      "tier": "niche",
+      "image": "images/placeholder-食.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "south-dublin-vintage",
@@ -978,7 +1218,12 @@
       "hook": "海港邊的古董酒店裡，三四十家販商擺出珠寶、家居與年代衫；散場後可以直接去走碼頭。",
       "rating": 3,
       "source": "https://www.psitsvintage.co.uk/pages/events/south-dublin-antiques-vintage-more-fair-2026",
-      "sourceName": "Ps Its Vintage / Vintage Ireland"
+      "sourceName": "Ps Its Vintage / Vintage Ireland",
+      "tier": "niche",
+      "image": "images/south-dublin-vintage.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：Ps Its Vintage / Vintage Ireland",
+      "imageOrigin": "https://vintageireland.eu/wp-content/uploads/2021/01/royalmarinehotel-exterior-deleted-cbbbcf29aa90811d4dbfdf0041e4bebf.jpg"
     },
     {
       "id": "open-banba",
@@ -995,7 +1240,12 @@
       "source": "https://www.irishtimes.com/food/restaurants/2026/10/13/banba-first-look-local-produce-and-seasonal-flavours-at-dublins-newest-restaurant/",
       "sourceName": "The Irish Times",
       "openingStatus": "已開業",
-      "shopType": "餐廳"
+      "shopType": "餐廳",
+      "tier": "niche",
+      "image": "images/open-banba.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：The Irish Times",
+      "imageOrigin": "https://www.irishtimes.com/resizer/v2/GQJWVGY7FREJBHS5B2LA6QFKHU.JPG?smart=true&auth=a27572b9680eed09451ea902bf97317a7d80e7d528d61fb042abb95c60a0bf3b&width=1200&height=630"
     },
     {
       "id": "open-sister-suesey",
@@ -1012,7 +1262,12 @@
       "source": "https://diningindublin.ie/sister-suesey-launches-brand-new-location/",
       "sourceName": "Dining in Dublin",
       "openingStatus": "已開業",
-      "shopType": "咖啡"
+      "shopType": "咖啡",
+      "tier": "niche",
+      "image": "images/open-sister-suesey.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：Dining in Dublin",
+      "imageOrigin": "https://diningindublin.ie/wp-content/uploads/sister-suesey.jpg"
     },
     {
       "id": "open-awol",
@@ -1029,7 +1284,11 @@
       "source": "https://lovindublin.substack.com/p/all-the-restaurant-openings-closures-44c",
       "sourceName": "Lovin Dublin",
       "openingStatus": "已開業",
-      "shopType": "咖啡／理髮店"
+      "shopType": "咖啡／理髮店",
+      "tier": "niche",
+      "image": "images/placeholder-食.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "open-fennel",
@@ -1046,7 +1305,11 @@
       "source": "https://lovindublin.substack.com/p/all-the-restaurant-openings-closures-44c",
       "sourceName": "Lovin Dublin",
       "openingStatus": "已開業",
-      "shopType": "麵包窗口"
+      "shopType": "麵包窗口",
+      "tier": "niche",
+      "image": "images/placeholder-食.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "open-poddles",
@@ -1063,7 +1326,11 @@
       "source": "https://everypubindublin.blogspot.com/p/pub-openingsreopeningspipeline-2026.html",
       "sourceName": "Every Pub in Dublin",
       "openingStatus": "重新開業",
-      "shopType": "酒館"
+      "shopType": "酒館",
+      "tier": "niche",
+      "image": "images/placeholder-食.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "open-townyard",
@@ -1080,7 +1347,11 @@
       "source": "https://everypubindublin.blogspot.com/p/pub-openingsreopeningspipeline-2026.html",
       "sourceName": "Every Pub in Dublin",
       "openingStatus": "已開業",
-      "shopType": "餐酒"
+      "shopType": "餐酒",
+      "tier": "niche",
+      "image": "images/placeholder-食.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "open-old-bank",
@@ -1097,7 +1368,11 @@
       "source": "https://everypubindublin.blogspot.com/p/pub-openingsreopeningspipeline-2026.html",
       "sourceName": "Every Pub in Dublin",
       "openingStatus": "已開業",
-      "shopType": "餐酒"
+      "shopType": "餐酒",
+      "tier": "niche",
+      "image": "images/placeholder-食.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "open-brownes",
@@ -1114,7 +1389,11 @@
       "source": "https://www.allthefood.ie/single-post/where-to-eat-in-november",
       "sourceName": "All The Food",
       "openingStatus": "已開業",
-      "shopType": "葡萄酒吧／餐廳"
+      "shopType": "葡萄酒吧／餐廳",
+      "tier": "niche",
+      "image": "images/placeholder-食.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "open-3brothers",
@@ -1131,7 +1410,11 @@
       "source": "https://everypubindublin.blogspot.com/p/pub-openingsreopeningspipeline-2026.html",
       "sourceName": "Every Pub in Dublin",
       "openingStatus": "已開業",
-      "shopType": "酒吧"
+      "shopType": "酒吧",
+      "tier": "niche",
+      "image": "images/placeholder-食.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "open-onora",
@@ -1148,7 +1431,11 @@
       "source": "https://www.hospitalityandcateringnews.com/2026/10/bereen-brothers-and-the-july-to-launch-onora-on-dublins-capel-street/",
       "sourceName": "Hospitality & Catering News",
       "openingStatus": "即將開業",
-      "shopType": "餐廳"
+      "shopType": "餐廳",
+      "tier": "niche",
+      "image": "images/placeholder-食.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "open-july",
@@ -1165,7 +1452,11 @@
       "source": "https://everypubindublin.blogspot.com/p/pub-openingsreopeningspipeline-2026.html",
       "sourceName": "Every Pub in Dublin",
       "openingStatus": "即將開業",
-      "shopType": "旅館／公寓"
+      "shopType": "旅館／公寓",
+      "tier": "niche",
+      "image": "images/placeholder-住.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "open-roxy",
@@ -1182,7 +1473,11 @@
       "source": "https://everypubindublin.blogspot.com/p/pub-openingsreopeningspipeline-2026.html",
       "sourceName": "Every Pub in Dublin",
       "openingStatus": "即將開業",
-      "shopType": "遊戲酒吧"
+      "shopType": "遊戲酒吧",
+      "tier": "niche",
+      "image": "images/placeholder-樂.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "open-hey-annie",
@@ -1200,7 +1495,11 @@
       "sourceName": "All The Food",
       "note": "正式開業日期尚未公佈，勿當成已開放",
       "openingStatus": "即將開業",
-      "shopType": "餐廳"
+      "shopType": "餐廳",
+      "tier": "niche",
+      "image": "images/placeholder-食.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
     },
     {
       "id": "open-goggins",
@@ -1217,7 +1516,469 @@
       "source": "https://everypubindublin.blogspot.com/p/pub-openingsreopeningspipeline-2026.html",
       "sourceName": "Every Pub in Dublin",
       "openingStatus": "即將開業",
-      "shopType": "酒館"
+      "shopType": "酒館",
+      "tier": "niche",
+      "image": "images/placeholder-食.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
+    },
+    {
+      "id": "ms-niall-horan",
+      "kind": "event",
+      "tier": "mainstream",
+      "name": "Niall Horan — Dinner Party",
+      "category": "樂",
+      "start": "2026-11-12",
+      "end": "2026-11-13",
+      "dateLabel": "今天與 11月13日（五），門開 18:30、開場 19:00",
+      "venue": "3Arena",
+      "area": "North Wall, Dublin 1",
+      "price": "從 €51.70 起",
+      "hook": "都柏林出身的 Horan 帶著新專輯 Dinner Party 回到 3Arena；官方確認 12、13 日如期舉行。這兩晚沒有往場館的 LUAS，出發前請先看交通說明。",
+      "rating": 1,
+      "source": "https://3arena.ie/events/niall-horan",
+      "sourceName": "3Arena",
+      "note": "12、13 日無 LUAS 到場館；16 歲以下須由成人陪同",
+      "image": "images/ms-niall-horan.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：3Arena",
+      "imageOrigin": "https://3arena.ie/images/uploads/events/_resize/niallhoran_3arena_720x720_resize_5b4186bc779460f79120d2db8337624f.jpg"
+    },
+    {
+      "id": "ms-choir-of-man",
+      "kind": "event",
+      "tier": "mainstream",
+      "name": "The Choir of Man",
+      "category": "樂",
+      "start": "2026-11-10",
+      "end": "2026-11-14",
+      "dateLabel": "至 11月14日（六）止；尚有 12、13、14 日場次，含日場",
+      "venue": "Bord Gáis Energy Theatre",
+      "area": "Grand Canal Dock, Dublin 2",
+      "price": "從 €24.20 起",
+      "hook": "酒吧裡長出來的合唱與現場樂隊舞台劇，在 Bord Gáis 演到本週六，今天起還有晚場與週五日場。",
+      "rating": 2,
+      "source": "https://www.bordgaisenergytheatre.ie/show/the-choir-of-man/",
+      "sourceName": "Bord Gáis Energy Theatre",
+      "image": "images/ms-choir-of-man.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：Bord Gáis Energy Theatre",
+      "imageOrigin": "https://www.bordgaisenergytheatre.ie/wp-content/uploads/2025/10/COM25013_BGE_640x906pxls-450x637.jpg"
+    },
+    {
+      "id": "ms-romeo-juliet",
+      "kind": "event",
+      "tier": "mainstream",
+      "name": "Ballet Ireland: Romeo & Juliet",
+      "category": "樂",
+      "start": "2026-11-11",
+      "end": "2026-11-14",
+      "dateLabel": "至 11月14日（六）止",
+      "venue": "The Gaiety Theatre",
+      "area": "South King Street, Dublin 2",
+      "price": "從 €18 起",
+      "hook": "Ballet Ireland 把這齣經典愛情芭蕾搬上 Gaiety，演出至本週六。",
+      "rating": 2,
+      "source": "https://www.gaietytheatre.ie/events/romeo-juliet/",
+      "sourceName": "The Gaiety Theatre",
+      "image": "images/ms-romeo-juliet.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：The Gaiety Theatre",
+      "imageOrigin": "https://www.gaietytheatre.ie/wp-content/uploads/2026/08/Romeo-and-Juliet-500x700-V1-330x443.png"
+    },
+    {
+      "id": "ms-ireland-fiji",
+      "kind": "event",
+      "tier": "mainstream",
+      "name": "Ireland v Fiji",
+      "category": "樂",
+      "start": "2026-11-14",
+      "dateLabel": "11月14日（六） 20:10 開賽",
+      "venue": "Aviva Stadium",
+      "area": "Lansdowne Road, Dublin 4",
+      "price": "票價見 Ticketmaster／官方頁",
+      "hook": "國家橄欖球錦標賽：愛爾蘭在 Aviva 迎戰 Fiji，週六晚上 20:10 開賽。",
+      "rating": 1,
+      "source": "https://www.avivastadium.ie/whats-on/nations-championship-2026-ireland-v-fiji",
+      "sourceName": "Aviva Stadium",
+      "image": "images/placeholder-樂.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
+    },
+    {
+      "id": "ms-brian-cox",
+      "kind": "event",
+      "tier": "mainstream",
+      "name": "Professor Brian Cox: Emergence",
+      "category": "育",
+      "start": "2026-11-14",
+      "dateLabel": "11月14日（六）門開 18:30",
+      "venue": "3Arena",
+      "area": "North Wall, Dublin 1",
+      "price": "從 €46.90 起",
+      "hook": "物理學家把巡演大秀 Emergence 帶到 3Arena，週六門開 18:30。",
+      "rating": 2,
+      "source": "https://3arena.ie/events/professor-brian-cox",
+      "sourceName": "3Arena",
+      "note": "16 歲以下須由成人陪同",
+      "image": "images/ms-brian-cox.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：3Arena",
+      "imageOrigin": "https://3arena.ie/images/uploads/events/_resize/PBC_DUB26_720x720_resize_5b4186bc779460f79120d2db8337624f.jpg"
+    },
+    {
+      "id": "ms-ireland-kosovo",
+      "kind": "event",
+      "tier": "mainstream",
+      "name": "Republic of Ireland v Kosovo",
+      "category": "樂",
+      "start": "2026-11-17",
+      "dateLabel": "11月17日（二） 19:45 開賽",
+      "venue": "Aviva Stadium",
+      "area": "Lansdowne Road, Dublin 4",
+      "price": "票價見官方頁",
+      "hook": "歐國聯：愛爾蘭國家足球隊在 Aviva 出戰 Kosovo，週二晚上 19:45 開賽。",
+      "rating": 1,
+      "source": "https://www.avivastadium.ie/whats-on/uefa-nations-league-republic-of-ireland-v-kosovo",
+      "sourceName": "Aviva Stadium",
+      "image": "images/placeholder-樂.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
+    },
+    {
+      "id": "ms-heathers",
+      "kind": "event",
+      "tier": "mainstream",
+      "name": "Heathers the Musical",
+      "category": "樂",
+      "start": "2026-11-17",
+      "end": "2026-11-21",
+      "dateLabel": "11月17–21日，19:30；19 與 21 日另有 14:30",
+      "venue": "Bord Gáis Energy Theatre",
+      "area": "Grand Canal Dock, Dublin 2",
+      "price": "從 €29.80 起",
+      "hook": "邪典電影改編的黑暗音樂劇來到 Bord Gáis，17 至 21 日，晚場 19:30，週四與週六另有日場。",
+      "rating": 2,
+      "source": "https://www.bordgaisenergytheatre.ie/show/heathers-2/",
+      "sourceName": "Bord Gáis Energy Theatre",
+      "note": "官方建議 14 歲以上；未滿 16 歲須由 18 歲以上成人陪同",
+      "image": "images/ms-heathers.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：Bord Gáis Energy Theatre",
+      "imageOrigin": "https://www.bordgaisenergytheatre.ie/wp-content/uploads/2026/02/Heathers_Dbln_Wbst_2880x1800.jpg"
+    },
+    {
+      "id": "ms-jungle",
+      "kind": "event",
+      "tier": "mainstream",
+      "name": "Jungle",
+      "category": "樂",
+      "start": "2026-11-18",
+      "dateLabel": "11月18日（三）門開 18:30",
+      "venue": "3Arena",
+      "area": "North Wall, Dublin 1",
+      "price": "從 €62.35 起",
+      "hook": "倫敦電子靈魂組合 Jungle 回到 3Arena，週三門開 18:30，特別嘉賓是 Rio Kosta。",
+      "rating": 2,
+      "source": "https://3arena.ie/events/jungle",
+      "sourceName": "3Arena",
+      "note": "16 歲以下須由成人陪同",
+      "image": "images/ms-jungle.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：3Arena",
+      "imageOrigin": "https://3arena.ie/images/uploads/events/_resize/JUNGLE_26_720x720_resize_5b4186bc779460f79120d2db8337624f.jpg"
+    },
+    {
+      "id": "ms-neverland",
+      "kind": "event",
+      "tier": "mainstream",
+      "name": "NEVERLAND — The Helix Panto 2026",
+      "category": "樂",
+      "start": "2026-11-20",
+      "end": "2027-01-10",
+      "dateLabel": "11月20日至 2027年1月10日",
+      "venue": "The Helix",
+      "area": "Glasnevin, Dublin 9",
+      "price": "€33–€45 另加手續費",
+      "hook": "Helix 年度童話劇飛向夢幻島，由 TheatreworX 製作，從 11 月 20 日演到明年 1 月 10 日。",
+      "rating": 1,
+      "source": "https://www.thehelix.ie/thehelixpanto2026",
+      "sourceName": "The Helix",
+      "image": "images/ms-neverland.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：The Helix",
+      "imageOrigin": "https://static.wixstatic.com/media/a66fd3_d8777247e8a54b6199c7afbbd49eb74f~mv2.png/v1/fill/w_1920,h_700,al_c/a66fd3_d8777247e8a54b6199c7afbbd49eb74f~mv2.png"
+    },
+    {
+      "id": "ms-twinkletown-smithfield",
+      "kind": "event",
+      "tier": "mainstream",
+      "name": "TwinkleTown Smithfield Square",
+      "category": "樂",
+      "start": "2026-11-20",
+      "end": "2026-12-31",
+      "dateLabel": "11月20日至12月31日（12月24–26日休息），平日 11:00–21:00、週末 10:00–21:00",
+      "venue": "Smithfield Square",
+      "area": "Smithfield, Dublin 7",
+      "price": "入場免費",
+      "hook": "市中心免費聖誕節慶：覆蓋冰場、Santo Panto、市集與遊樂，11 月 20 日開鑼，平安夜到聖誕節後第一天休息。",
+      "rating": 2,
+      "source": "https://twinkletown.ie/smithfield-square/",
+      "sourceName": "TwinkleTown",
+      "image": "images/ms-twinkletown-smithfield.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：TwinkleTown",
+      "imageOrigin": "https://twinkletown.ie/wp-content/uploads/2026/09/tt-ice-skating-hero.jpg"
+    },
+    {
+      "id": "ms-ireland-sa",
+      "kind": "event",
+      "tier": "mainstream",
+      "name": "Ireland v South Africa",
+      "category": "樂",
+      "start": "2026-11-21",
+      "dateLabel": "11月21日（六） 16:40 開賽",
+      "venue": "Aviva Stadium",
+      "area": "Lansdowne Road, Dublin 4",
+      "price": "票價見 Ticketmaster／官方頁",
+      "hook": "國家橄欖球錦標賽：愛爾蘭在 Aviva 迎戰南非，週六下午 16:40 開賽。",
+      "rating": 1,
+      "source": "https://www.avivastadium.ie/whats-on/nations-championship-2026-ireland-v-south-africa",
+      "sourceName": "Aviva Stadium",
+      "image": "images/placeholder-樂.webp",
+      "imageKind": "placeholder",
+      "imageCredit": "分類示意（無活動官方圖片）"
+    },
+    {
+      "id": "ms-wonderful-life",
+      "kind": "event",
+      "tier": "mainstream",
+      "name": "It’s A Wonderful Life",
+      "category": "樂",
+      "start": "2026-11-17",
+      "end": "2027-01-10",
+      "dateLabel": "正式場 11月21日至 2027年1月10日；預演自 11月17日起",
+      "venue": "Gate Theatre",
+      "area": "Parnell Square, Dublin 1",
+      "price": "從 €16.50 起",
+      "hook": "Gate 聖誕檔改編這部經典電影，由 Claire O’Reilly 執導；正式場從 21 日演到明年 1 月 10 日，預演已從 17 日開始。",
+      "rating": 2,
+      "source": "https://gatetheatre.ie/shows/its-a-wonderful-life-2026/",
+      "sourceName": "Gate Theatre",
+      "image": "images/ms-wonderful-life.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：Gate Theatre",
+      "imageOrigin": "https://gatetheatre.ie/wp-content/uploads/2026/10/Its-A-Wonderful-Life_Show-Page-1-scaled.webp"
+    },
+    {
+      "id": "ms-comic-con",
+      "kind": "event",
+      "tier": "mainstream",
+      "name": "Comic Con Ireland",
+      "category": "樂",
+      "start": "2026-11-21",
+      "end": "2026-11-22",
+      "dateLabel": "11月21–22日（六、日）",
+      "venue": "RDS",
+      "area": "Ballsbridge, Dublin 4",
+      "price": "票價見來源",
+      "hook": "愛爾蘭大型流行文化展回到 RDS，11 月 21、22 日兩天，購票與嘉賓名單見主辦官網。",
+      "rating": 2,
+      "source": "https://www.comconireland.com/",
+      "sourceName": "Comic Con Ireland",
+      "image": "images/ms-comic-con.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：Comic Con Ireland",
+      "imageOrigin": "https://static.wixstatic.com/media/6eea13_09817633f1ec461f98441add94f2b20d~mv2.png/v1/fill/w_1200,h_618,al_c/6eea13_09817633f1ec461f98441add94f2b20d~mv2.png"
+    },
+    {
+      "id": "ms-robin-hood",
+      "kind": "event",
+      "tier": "mainstream",
+      "name": "Robin Hood — The Gaiety Panto",
+      "category": "樂",
+      "start": "2026-11-22",
+      "end": "2027-01-03",
+      "dateLabel": "11月22日至 2027年1月3日",
+      "venue": "The Gaiety Theatre",
+      "area": "South King Street, Dublin 2",
+      "price": "從 €23 起",
+      "hook": "Gaiety 年度童話劇今年是羅賓漢，11 月 22 日起演到明年 1 月 3 日。",
+      "rating": 1,
+      "source": "https://www.gaietytheatre.ie/events/robin-hood/",
+      "sourceName": "The Gaiety Theatre",
+      "image": "images/ms-robin-hood.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：The Gaiety Theatre",
+      "imageOrigin": "https://www.gaietytheatre.ie/wp-content/uploads/2025/12/RobinHood-Panto26_GaietyTMspec_3-330x443.jpg"
+    },
+    {
+      "id": "ms-silence-lambs",
+      "kind": "event",
+      "tier": "mainstream",
+      "name": "The Silence of the Lambs",
+      "category": "樂",
+      "start": "2026-11-24",
+      "end": "2026-11-28",
+      "dateLabel": "11月24–28日；晚場 19:30，26 與 28 日另有 14:30",
+      "venue": "Bord Gáis Energy Theatre",
+      "area": "Grand Canal Dock, Dublin 2",
+      "price": "從 €24.20 起",
+      "hook": "經典驚悚搬上 Bord Gáis 舞台，11 月 24 至 28 日有晚場，週四與週六另有日場。",
+      "rating": 2,
+      "source": "https://www.bordgaisenergytheatre.ie/show/the-silence-of-the-lambs/",
+      "sourceName": "Bord Gáis Energy Theatre",
+      "image": "images/ms-silence-lambs.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：Bord Gáis Energy Theatre",
+      "imageOrigin": "https://www.bordgaisenergytheatre.ie/wp-content/uploads/2025/12/SOTL-202607-Traf-FullCast-61256SGA-1200x600-1.jpg"
+    },
+    {
+      "id": "ms-magnificent",
+      "kind": "event",
+      "tier": "mainstream",
+      "name": "The Magnificent",
+      "category": "樂",
+      "start": "2026-11-25",
+      "end": "2027-01-30",
+      "dateLabel": "11月25日至 2027年1月30日；11月25–30日為預演",
+      "venue": "Abbey Theatre",
+      "area": "Abbey Street, Dublin 1",
+      "price": "€15–€54 另加手續費",
+      "hook": "艾比劇院聖誕檔世界首演：四個星期、六個女人、最後一次一起過聖誕。劇本 Erica Murray，導演 Joe Dowling。",
+      "rating": 2,
+      "source": "https://www.abbeytheatre.ie/show/the-magnificent/",
+      "sourceName": "Abbey Theatre",
+      "image": "images/ms-magnificent.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：Abbey Theatre",
+      "imageOrigin": "https://www.abbeytheatre.ie/wp-content/uploads/2026/11/Magnificent-website-2-e1793957009801.png"
+    },
+    {
+      "id": "ms-everwinter",
+      "kind": "event",
+      "tier": "mainstream",
+      "name": "Everwinter",
+      "category": "樂",
+      "start": "2026-11-25",
+      "end": "2027-01-03",
+      "dateLabel": "11月25日至 2027年1月3日；市集至 12月23日，冰場 12月26日至1月3日",
+      "venue": "RDS",
+      "area": "Ballsbridge, Dublin 4",
+      "price": "票價見來源（時段與票種不一）",
+      "hook": "RDS 新的冬季節慶：11 月 25 日至 12 月 23 日的節慶場域，Mastercard Ice Rink 則在 12 月 26 日至 1 月 3 日重開。",
+      "rating": 2,
+      "source": "https://dublin.ie/whats-on/listings/everwinter/",
+      "sourceName": "Dublin.ie",
+      "image": "images/ms-everwinter.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：Dublin.ie",
+      "imageOrigin": "https://dublin.ie/wp-content/uploads/WO-RDS-Everwinter_1200x600.jpg"
+    },
+    {
+      "id": "ms-twinkletown-stpats",
+      "kind": "event",
+      "tier": "mainstream",
+      "name": "TwinkleTown St Patrick’s Park",
+      "category": "樂",
+      "start": "2026-11-27",
+      "end": "2026-12-23",
+      "dateLabel": "11月27日至12月23日，平日 11:00–21:00、週末 10:00–21:00",
+      "venue": "St Patrick’s Park",
+      "area": "The Liberties, Dublin 8",
+      "price": "入場免費",
+      "hook": "聖帕特里克公園的免費聖誕節慶：光雕、合唱團、Twilight Garden 與市集，11 月 27 日開到 12 月 23 日。",
+      "rating": 2,
+      "source": "https://twinkletown.ie/st-patricks-park/",
+      "sourceName": "TwinkleTown",
+      "image": "images/ms-twinkletown-stpats.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：TwinkleTown",
+      "imageOrigin": "https://twinkletown.ie/wp-content/uploads/2026/09/tt-bandstand-hero.jpg"
+    },
+    {
+      "id": "ms-swords-market",
+      "kind": "event",
+      "tier": "mainstream",
+      "name": "Swords Castle Christmas Market",
+      "category": "樂",
+      "start": "2026-11-27",
+      "end": "2026-12-06",
+      "dateLabel": "僅五個市集日：11月27日 15:00–19:00；11月28、29日與 12月5、6日 12:00–18:00",
+      "venue": "Swords Castle",
+      "area": "Swords, Fingal",
+      "price": "免費",
+      "hook": "Fingal 郡議會在古堡辦的免費聖誕市集，不是天天開——只在上述五個日子營業。",
+      "rating": 2,
+      "source": "https://www.fingal.ie/events/swords-castle-christmas-market",
+      "sourceName": "Fingal County Council",
+      "image": "images/ms-swords-market.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：Fingal County Council",
+      "imageOrigin": "https://www.fingal.ie/sites/default/files/styles/user_defined/public/2026-10/whatsapp-image-2026-09-01-at-19.59.07.jpeg.avif?itok=2IdAsqUF"
+    },
+    {
+      "id": "ms-wild-lights",
+      "kind": "event",
+      "tier": "mainstream",
+      "name": "Wild Lights: Passport to Wonder",
+      "category": "樂",
+      "start": "2026-11-12",
+      "end": "2027-01-05",
+      "dateLabel": "即日起至 2027年1月5日，每晚 17:00–21:00（最後入場 19:30）；12月24–26日休息",
+      "venue": "Dublin Zoo",
+      "area": "Phoenix Park, Dublin 8",
+      "price": "3 歲以下免費；其他票價見訂票頁。平日優惠碼 MIDWEEKWONDER（11月12–30日週一至四，85 折）",
+      "hook": "愛爾蘭最大型燈光節回到都柏林動物園，今年主題是 Passport to Wonder，九個沉浸式光區，從今晚開到明年 1 月 5 日。",
+      "rating": 2,
+      "source": "https://www.dublinzoo.ie/wildlights/",
+      "sourceName": "Dublin Zoo",
+      "image": "images/ms-wild-lights.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：Dublin Zoo",
+      "imageOrigin": "https://www.dublinzoo.ie/wp-content/uploads/2026/09/Hero-Asset_Square_Portrait_V2-1024x1024.png"
+    },
+    {
+      "id": "ms-elf-town",
+      "kind": "event",
+      "tier": "mainstream",
+      "name": "Elf Town Dublin",
+      "category": "樂",
+      "start": "2026-11-14",
+      "end": "2026-12-23",
+      "dateLabel": "11月14日至12月23日",
+      "venue": "RDS",
+      "area": "Ballsbridge, Dublin 4",
+      "price": "成人從 €19 起、兒童從 €29 起",
+      "hook": "大型聖誕體驗回到 RDS，11 月 14 日至 12 月 23 日，成人票從 €19 起、兒童票從 €29 起，場次見來源。",
+      "rating": 2,
+      "source": "https://dublin.ie/whats-on/listings/elf-town-dublin/",
+      "sourceName": "Dublin.ie",
+      "image": "images/ms-elf-town.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：Dublin.ie",
+      "imageOrigin": "https://dublin.ie/wp-content/uploads/WO-RDS-ElfTown_1200x600.jpg"
+    },
+    {
+      "id": "ms-interpol-bloc",
+      "kind": "event",
+      "tier": "mainstream",
+      "name": "Interpol and Bloc Party",
+      "category": "樂",
+      "start": "2026-11-30",
+      "dateLabel": "11月30日（一）門開 18:00",
+      "venue": "3Arena",
+      "area": "North Wall, Dublin 1",
+      "price": "從 €67.70 起",
+      "hook": "兩團同台 3Arena，11 月 30 日門開 18:00。",
+      "rating": 2,
+      "source": "https://3arena.ie/events/bloc-party",
+      "sourceName": "3Arena",
+      "note": "16 歲以下須由成人陪同",
+      "image": "images/ms-interpol-bloc.webp",
+      "imageKind": "source",
+      "imageCredit": "圖片來源：3Arena",
+      "imageOrigin": "https://3arena.ie/images/uploads/events/_resize/INBC_DUB26_720x720_resize_5b4186bc779460f79120d2db8337624f.jpg"
     }
   ]
 }
@@ -1229,7 +1990,7 @@
     const CATS = ["食", "衣", "住", "行", "育", "樂"];
     const TZ = "Europe/Dublin";
 
-    const state = { cat: "all", date: "all", sort: "rating", q: "" };
+    const state = { cat: "all", date: "all", sort: "rating", q: "", tier: "all" };
     let DATA = null;
     let TODAY = "";
     let WEEKEND_FROM = "";
@@ -1309,7 +2070,7 @@
 
     function matchesQuery(item, q) {
       if (!q) return true;
-      const hay = [item.name, item.hook, item.venue, item.area, item.sourceName, item.shopType, item.note, item.dateLabel]
+      const hay = [item.name, item.hook, item.venue, item.area, item.sourceName, item.shopType, item.note, item.dateLabel, item.tier === "mainstream" ? "主流重點" : "小眾獵奇"]
         .filter(Boolean)
         .join(" ")
         .toLowerCase();
@@ -1330,15 +2091,32 @@
         .replace(/"/g, "&quot;");
     }
 
+    function matchesTier(item) {
+      if (state.tier === "all") return true;
+      return (item.tier || "niche") === state.tier;
+    }
+
+    function placeholderSrc(item) {
+      return "images/placeholder-" + item.category + ".webp";
+    }
+
     function cardHTML(item) {
       const flags = [];
+      if ((item.tier || "niche") === "mainstream") flags.push('<span class="pill tier-ms">重點</span>');
       if (item.openingStatus) flags.push('<span class="flag status">' + escapeHtml(item.openingStatus) + "</span>");
       if (item.note) flags.push('<span class="flag">' + escapeHtml(item.note) + "</span>");
       const mid = item.shopType
         ? "<li><span>類型</span>" + escapeHtml(item.shopType) + "</li>"
         : "<li><span>票價</span>" + escapeHtml(item.price) + "</li>";
+      const img = item.image || placeholderSrc(item);
+      const kind = item.imageKind === "source" ? "source" : "placeholder";
+      const alt = escapeHtml(item.name) + (kind === "source" ? " 活動圖片" : " 分類示意圖");
+      const credit = escapeHtml(item.imageCredit || (kind === "source" ? "圖片來源：" + (item.sourceName || "出處頁面") : "分類示意（無活動官方圖片）"));
       return (
         '<article class="card cat-' + item.category + '">' +
+          '<figure class="thumb ' + kind + '">' +
+            '<img src="' + escapeHtml(img) + '" alt="' + alt + '" width="800" height="500" loading="lazy" onerror="this.onerror=null;this.src=\'' + placeholderSrc(item) + '\';">' +
+          "</figure>" +
           '<header class="card-top">' +
             '<span class="pill">' + item.category + "<i>" + CAT_HINT[item.category] + "</i></span>" +
             flags.join("") +
@@ -1350,6 +2128,7 @@
             "<li><span>地點</span>" + escapeHtml(item.venue) + " · " + escapeHtml(item.area) + "</li>" +
             mid +
           "</ul>" +
+          '<p class="credit">' + credit + "</p>" +
           '<footer class="card-foot">' +
             '<div class="rating" title="獵奇度 ' + item.rating + ' / 5">' +
               "<b>獵奇度</b><span>" + ratingMarks(item.rating) + "</span>" +
@@ -1364,9 +2143,21 @@
 
     function renderChips() {
       const items = DATA.items || [];
-      const events = items.filter((i) => i.kind === "event");
+      const events = items.filter((i) => i.kind === "event" && matchesTier(i));
       const counts = { 食: 0, 衣: 0, 住: 0, 行: 0, 育: 0, 樂: 0 };
       events.forEach((e) => { counts[e.category] += 1; });
+
+      const allEvents = (DATA.items || []).filter((i) => i.kind === "event");
+      const tierBox = document.getElementById("tiers");
+      const tierBtns = [
+        ["all", "全部", allEvents.length],
+        ["mainstream", "主流重點", allEvents.filter((i) => i.tier === "mainstream").length],
+        ["niche", "小眾獵奇", allEvents.filter((i) => (i.tier || "niche") === "niche").length]
+      ];
+      tierBox.innerHTML = tierBtns.map(([id, label, n]) =>
+        '<button type="button" class="chip' + (id === "mainstream" ? " tier-ms" : "") + '" data-tier="' + id + '" aria-pressed="' + (state.tier === id) + '">' +
+          label + "<em>" + n + "</em></button>"
+      ).join("");
 
       const catBox = document.getElementById("cats");
       const catBtns = [{ id: "all", label: "全部", n: events.length }].concat(
@@ -1403,12 +2194,12 @@
       const items = DATA.items || [];
       const openings = items
         .filter((i) => i.kind === "opening")
-        .filter((i) => (state.cat === "all" || i.category === state.cat) && matchesQuery(i, q))
+        .filter((i) => matchesTier(i) && (state.cat === "all" || i.category === state.cat) && matchesQuery(i, q))
         .sort((a, b) => a.start.localeCompare(b.start));
 
       let events = items
         .filter((i) => i.kind === "event")
-        .filter((i) => (state.cat === "all" || i.category === state.cat) && inDateFilter(i, state.date) && matchesQuery(i, q));
+        .filter((i) => matchesTier(i) && (state.cat === "all" || i.category === state.cat) && inDateFilter(i, state.date) && matchesQuery(i, q));
 
       if (state.sort === "rating") {
         events = events.slice().sort((a, b) => b.rating - a.rating || a.start.localeCompare(b.start));
@@ -1428,9 +2219,9 @@
         openSec.hidden = false;
         openBox.innerHTML = openings.map(cardHTML).join("");
       } else {
-        openSec.hidden = !q && state.cat === "all" ? false : true;
-        openBox.innerHTML = (q || state.cat !== "all") ? "" : '<p class="empty">目前沒有新店情報。</p>';
-        if (q || state.cat !== "all") openSec.hidden = true;
+        const filteredAway = q || state.cat !== "all" || state.tier !== "all";
+        openSec.hidden = filteredAway;
+        openBox.innerHTML = filteredAway ? "" : '<p class="empty">目前沒有新店情報。</p>';
       }
 
       const evBox = document.getElementById("events");
@@ -1444,11 +2235,42 @@
         document.getElementById("event-cap").textContent = "目前沒有符合的活動。";
       }
 
+      const spotSec = document.getElementById("spotlight");
+      const spotBox = document.getElementById("spotlight-track");
+      let spots = [];
+      if (state.tier !== "niche") {
+        spots = items
+          .filter((i) => i.kind === "event" && (i.tier || "niche") === "mainstream")
+          .filter((i) => (state.cat === "all" || i.category === state.cat) && inDateFilter(i, state.date) && matchesQuery(i, q))
+          .slice()
+          .sort((a, b) => {
+            const as = a.start < TODAY && (!a.end || a.end >= TODAY) ? TODAY : a.start;
+            const bs = b.start < TODAY && (!b.end || b.end >= TODAY) ? TODAY : b.start;
+            return as.localeCompare(bs) || a.start.localeCompare(b.start);
+          })
+          .slice(0, 10);
+      }
+      if (spots.length) {
+        spotSec.hidden = false;
+        spotBox.innerHTML = spots.map(cardHTML).join("");
+        document.getElementById("spot-cap").textContent =
+          "接下來值得記在行事曆上的主流大型活動，依日期排列。目前顯示 " + spots.length + " 項。";
+      } else {
+        spotSec.hidden = true;
+        spotBox.innerHTML = "";
+      }
+
       document.getElementById("count").textContent = "顯示 " + events.length + " 項活動";
       renderChips();
     }
 
     function bind() {
+      document.getElementById("tiers").addEventListener("click", (e) => {
+        const btn = e.target.closest("[data-tier]");
+        if (!btn) return;
+        state.tier = btn.getAttribute("data-tier");
+        render();
+      });
       document.getElementById("cats").addEventListener("click", (e) => {
         const btn = e.target.closest("[data-cat]");
         if (!btn) return;
